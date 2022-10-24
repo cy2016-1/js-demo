@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- new Function -->
+    <title>动态函数的应用场景</title>
+</head>
+<body>
+    <div id="main">
+        {{name}},{{age}}
+        <b style="color:{{age===18?'red':'green'}}">你好</b>
+    </div> 
+</body>
+<script>
+    new Init({
+        el: '#main',
+        data: {
+            name: 'abc',
+            age: 19
+        }
+    })
+    function Init(opt) {
+        this.data = opt.data
+        this.el = document.querySelector(opt.el)
+        this.el.innerHTML = this.el.innerHTML.replace(/\{\{(.*?)\}\}/g, (a, b) => {
+            return new Function(
+                ...Object.keys(this.data),
+                `return ${b}`
+            )(...Object.values(this.data))
+        })
+    }
+</script>
+
+<!-- 左侧菜单通过循环输出 -->
+<view wx:for="{{stars}}" wx:key="item" wx:for-index="i" @click="setCurrentIndex(i)">{{item.name}}</view>
+<!-- 根据左边点击来切换下面的数据展示 -->
+<view>
+    {{stars[index]}} <!-- 这个对象就是你选择的项 -->
+</view>
+<script>
+    export default {
+        data: {
+            index: 0
+        },
+        methods: {
+            setCurrentIndex(i) {
+                /* 设置当前选择的的索引 */
+                this.setData({
+                    index: i
+                })
+            }
+        }
+    }
+</script>
+</html>

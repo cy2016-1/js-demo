@@ -1,0 +1,20 @@
+<canvas id="cvs" width="800" height="600" style="background-color:#eee;"></canvas>
+<script>
+    const cvs = document.getElementById('cvs')
+    const ctx = cvs.getContext('2d')
+    let isDrawing = false
+    cvs.addEventListener('mousedown', e => {
+        isDrawing = true
+        ctx.moveTo(e.pageX, e.pageY)
+    })
+    cvs.addEventListener('mousemove', e => {
+        if (isDrawing) {
+            ctx.lineWidth = 10
+            ctx.lineTo(e.pageX, e.pageY)
+            ctx.stroke()
+        }
+    })
+    cvs.addEventListener('mouseup', e => {
+        isDrawing = false
+    })
+</script>

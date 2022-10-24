@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>雪夜背景</title>
+</head>
+<body style="margin: 0">
+	<canvas id="cvs" style="background-color: #000;"></canvas>
+</body>
+<script>
+	const cvs = document.querySelector('#cvs')
+	const ctx = cvs.getContext('2d')
+	const {clientWidth:width, clientHeight:height} = document.documentElement
+	cvs.width = width
+	cvs.height = height
+	ctx.fillStyle = '#ffffff'
+	const bgColors = Array.from(new Array(400)).map(v => {
+		return {
+			x: Math.random() * width,
+			y: Math.random() * height,
+			step: Math.random() * 2.5 + 0.5
+		}
+	})
+
+	let colors = []
+	const sendText = (text, fontSize = 100, stepV = 40) => {
+		ctx.fillStyle = '#000000'
+		ctx.fillRect(0, 0, width, height)
+		ctx.font = `bold ${fontSize}px 微软雅黑`
+		ctx.fillStyle = '#ffffff'
+		ctx.textAlign = 'center'
+		ctx.textBaseline = 'middle'
+		ctx.fillText(text, width / 2, height / 2)
+		const data = ctx.getImageData(0, 0, width, height).data
+
+		let index = 0
+		let bl = 4
+		let useIndex = 0
+		for(let i=0;i<data.length;i+=4) {
+			const x = index % width
+			const y = Math.ceil(index / width)
+			if (x%bl === 0 && y%bl === 0 && data[i] === 255 &&data[i+1] === 255 &&data[i+2] === 255) {
+				const rx = Math.floor(Math.random() * fontSize) + width / 2 - fontSize / 2
+				const ry = Math.floor(Math.random() * fontSize) + height / 2 - fontSize / 2
+
+				const item = colors[useIndex]
+				if (item) {
+					colors[useIndex] = {
+						x,
+						y,
+						rx: item.x,
+						ry: item.y,
+						stepX: Math.abs(item.x - x) / stepV,
+						stepY: Math.abs(item.y - y) / stepV
+					}
+				} else {
+					colors[useIndex] = {
+						x,
+						y,
+						rx,
+						ry,
+						stepX: Math.abs(rx - x) / stepV,
+						stepY: Math.abs(ry - y) / stepV
+					}
+				}
+				useIndex++
+			}
+			index++
+		}
+		if (useIndex < colors.length) {
+			colors.splice(useIndex, colors.length - useIndex)
+		}
+	}
+	
+	const render = () => {
+		ctx.clearRect(0, 0, width, height)
+		ctx.beginPath()
+		colors.forEach(v => {
+			if (v.rx > v.x) {
+				v.rx -= v.stepX
+				if (v.rx < v.x) {
+					v.rx = v.x
+				}
+			} else if (v.rx < v.x) {
+				v.rx += v.stepX
+				if (v.rx > v.x) {
+					v.rx = v.x
+				}
+			}
+
+			if (v.ry > v.y) {
+				v.ry -= v.stepY
+				if (v.ry < v.y) {
+					v.ry = v.y
+				}
+			} else if (v.ry < v.y) {
+				v.ry += v.stepY
+				if (v.ry > v.y) {
+					v.ry = v.y
+				}
+			}
+			ctx.rect(v.rx, v.ry, 3, 3)
+		})
+		bgColors.forEach(v => {
+			v.y = v.y > height ? 0 : (v.y + v.step)
+			ctx.rect(v.x, v.y, 3, 3)
+		})
+		
+		ctx.fill()
+		requestAnimationFrame(render)
+	}
+	render()
+	const awaitSendText = async (txt, fontSize, stepV) => {
+		return new Promise(resolve => {
+			sendText(txt, fontSize, stepV)
+			colors.sort(v => Math.random() - 0.5)
+			setTimeout(() => resolve(), 2000 + (stepV > 40 ? 1000 : 0))
+		})
+	}
+	const run = async () => {
+		const text = `登高 - 杜甫，风急天高猿啸哀，渚清沙白鸟飞回，无边落木萧萧下，不尽长江滚滚来，万里悲秋常作客，百年多病独登台，艰难苦恨繁霜鬓，潦倒新停浊酒杯`.split('，')
+		for(let i=0;i<text.length;i++) {
+			await awaitSendText(text[i], 150, i === 0 ? 100 : 40)
+		}
+	}
+	run()
+	// 
+</script>
+</html>

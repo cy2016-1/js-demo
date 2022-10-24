@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>刮刮乐效果</title>
+    <style>
+        body {
+            margin:0;
+        }
+        canvas {
+            background: url('./images/zj.png') no-repeat center center;
+            background-size: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="cvs" width="605" height="338"></canvas>
+    <script>
+        const ctx = cvs.getContext('2d')
+        const img = new Image()
+        img.src = './images/zj-bg.jpeg'
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0, cvs.width, cvs.height)
+        }
+        let isClearing = false
+        cvs.addEventListener('mousedown', e => {
+            isClearing = true
+        })
+        cvs.addEventListener('mousemove', e => {
+            if (isClearing) {
+                const size = 30
+                ctx.clearRect(e.pageX-size/2, e.pageY-size/2, 
+                    size, size)
+            }
+        })
+        document.addEventListener('mouseup', e => {
+            isClearing = false
+        })
+    </script>
+</body>
+</html>

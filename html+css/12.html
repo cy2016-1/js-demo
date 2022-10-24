@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        .letter {
+            background-color: cadetblue;
+            color: #fff;
+            padding: 5px;
+            position: sticky;
+            top: 0;
+        }
+        .content {
+            height: 200px;
+            padding: 10px;
+        }
+        .more {
+            position: fixed;
+            right: 10px;
+            top: 100px;
+            user-select: none;
+        }
+        .more-latter.active {
+            color: red
+        }
+    </style>
+</head>
+<body>
+    <div class="letter" id="lettera">A</div>
+    <div class="content">xxxxxxxxxxxx</div>
+    <div class="letter">B</div>
+    <div class="content">xxxxxxxxxxxx</div>
+    <div class="letter">C</div>
+    <div class="content">xxxxxxxxxxxx</div>
+    <div class="letter">D</div>
+    <div class="content">xxxxxxxxxxxx</div>
+    <div class="letter">E</div>
+    <div class="content">xxxxxxxxxxxx</div>
+    <div class="more">
+        <div class="more-latter">A</div>
+        <div class="more-latter">B</div>
+        <div class="more-latter">C</div>
+        <div class="more-latter">D</div>
+        <div class="more-latter">E</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>手动实现虚拟DOM</title>
+    <script src="./10.js"></script>
+</head>
+<body>
+    <div id="root">
+        {{time}}
+        <button @click="onClick" :title="title + '2'">
+            {{time.toString()}}
+        </button>
+        <a>{{showLabel}}</a>
+        <div :title="title" v-if="showLabel === 0">
+            {{title}} - 0
+        </div>
+        <div :title="title" v-else-if="showLabel === 1">
+            {{title}} - 1
+        </div>
+        <div :title="title" v-else>
+            {{title}} - 2
+        </div>
+        <div v-for="(n, i) in list">
+            ----
+            <div v-for="(d, r) in list">
+                {{n.name}},{{n.age}}
+                <b></b>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    new My('#root', {
+        data() {
+            return {
+                title: '这是一个纯js实现的虚拟dom',
+                showLabel: 0,
+                time: new Date().toLocaleString(),
+                list: [
+                    {name: 'aaa', age: 18},
+                    {name: 'bbb', age: 18}
+                ]
+            }
+        },
+        onload() {
+            setInterval(() => {
+                this.setData({
+                    time: new Date().toLocaleString()
+                })
+            }, 1000)
+        },
+        methods: {
+            onClick() {
+                let showLabel = this.data.showLabel
+                if (showLabel >= 2) {
+                    showLabel = 0
+                } else {
+                    showLabel++
+                }
+                this.setData({
+                    showLabel: showLabel
+                })
+            }
+        }
+    })
+</script>
+</html>

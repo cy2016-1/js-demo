@@ -1,0 +1,93 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+<title>HTML5 绘图</title>
+<style>
+	.canvas{border:1px solid #ccc;cursor:crosshair;}
+</style>
+</head>
+<body>
+	<input type="button" value="重放" id="btn1"/> 
+	<input type="button" value="清空" id="btn2"/>
+    <br/>
+	<canvas id="cvs" class="canvas"></canvas>
+</body>
+</html>
+<script>
+	class Draw {
+		constructor(selector, width, height) {
+			this.element = document.querySelector(selector)
+			this.canvas = this.element.getContext('2d')
+			this.element.width = width
+			this.element.height = height
+			this.timeId = null
+			this.animateArr = []
+		}
+		init() {
+			const {canvas:c, element: el} = this
+			let isDrag = false
+
+			c.lineWidth = 2
+			c.lineJoin = 'round'
+			c.shadowColor = '#000'
+			c.shadowBlur = 4
+
+			el.onmousedown = () => {
+				isDrag = true
+				c.beginPath()
+			}
+			el.onmousemove = (e) => {
+				if (isDrag) {
+					const x = e.pageX - el.offsetLeft
+					const y = e.pageY - el.offsetTop
+					c.lineTo(x, y)
+					c.stroke()
+					this.animateArr.push([x, y])
+				}
+			}
+			el.onmouseup = () => {
+				isDrag = false
+				this.animateArr.push(-1)
+			}
+			el.onmouseout = () => {
+				el.onmouseup()
+			}
+		}
+		animateGo() {
+			const {canvas:c} = this
+			this.clear()
+			c.beginPath()
+			const loop = (animate, i) => {
+				if (i < animate.length - 1) {
+					const arr = animate[i]
+					if (arr === -1) {
+						c.beginPath()
+					} else {
+						c.lineTo(arr[0], arr[1])
+						c.stroke()
+					}
+					i++
+					this.timeId = setTimeout(() => {
+						loop(animate, i)
+					} ,10)
+				}
+			}
+			loop(this.animateArr, 0)
+		}
+		clear() {
+			const {canvas:c} = this
+			const {width, height} = this.element
+			c.clearRect(0, 0, width, height)
+		}
+	}
+	const g = new Draw('#cvs', 600, 500)
+	g.init()
+	document.getElementById('btn1').onclick = () => {
+		g.animateGo()
+	}
+	document.getElementById('btn2').onclick = () => {
+		g.clear()
+		g.animateArr = []
+	}
+</script>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>图表</title>
+</head>
+<body>
+	<canvas id="cvs"></canvas>
+</body>
+<script>
+	const cvs = document.getElementById('cvs')
+	const ctx = cvs.getContext('2d')
+	const bl = 2
+	const fontSize = 20 * bl
+	const lineHeight = fontSize * 1.5
+	cvs.width = cvs.height = 400 * bl
+	cvs.style.width = cvs.style.height = `${cvs.width / bl}px`
+	ctx.lineWidth = 20 * bl
+	ctx.lineCap = 'round'
+	ctx.textAlign = 'center'
+	ctx.textBaseline = 'middle'
+	ctx.font = fontSize + 'px 微软雅黑'
+	const data = [
+		{
+			text: '项目1进度',
+			rate: 90,
+			color: '#ff8800'
+		},
+		{
+			text: '项目2进度',
+			color: 'green',
+			rate: 80
+		},
+		{
+			text: '项目3进度',
+			color: '#0066cc',
+			rate: 50
+		}
+	]
+	data.forEach(v => {
+		v.runRate = 0
+		v.step = v.rate / 100
+	})
+	const render = () => {
+		ctx.clearRect(0, 0, cvs.width, cvs.height)
+		data.forEach((v, i) => {
+			const mt = ctx.lineWidth / 2 +  (i * ctx.lineWidth)
+			const r = cvs.width / 2
+			ctx.beginPath()
+			ctx.strokeStyle = '#eeeeee'
+			ctx.arc(r, r, r - mt, 0, Math.PI / 180 * 360)
+			
+			ctx.stroke()
+			ctx.beginPath()
+			ctx.strokeStyle = v.color
+			ctx.arc(r, r, r - mt, 0, Math.PI / 180 * (360 * v.runRate / 100))
+			ctx.stroke()
+			ctx.fillStyle = v.color
+			if (v.runRate > v.rate) {
+				v.runRate = v.rate
+			} else if (v.runRate < v.rate){
+				v.runRate+=v.step
+			}
+			ctx.fillText(`${v.text}：${v.rate.toFixed(0)}%`, cvs.width / 2, i * lineHeight + (cvs.height - lineHeight * data.length) / 2 + lineHeight / 2)
+		})
+		if (!data.every(v => v.runRate === v.rate)) {
+			requestAnimationFrame(render)	
+		}
+	}
+	render()
+</script>
+</html>

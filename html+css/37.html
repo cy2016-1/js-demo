@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>camera</title>
+</head>
+<body>
+    <div id="contentHolder">
+		<video id="video" width="300" height="300" autoplay></video>
+		<canvas style="display:none;" id="canvas" width="300" height="300"></canvas>
+		<img id="imgXX" src="" />
+	</div>
+	<button id="btn_snap" onclick="takePhoto()">拍照</button>
+    <script>
+        const cvs = document.getElementById('canvas')
+		const ctx = cvs.getContext('2d')
+        const video = document.getElementById('video')
+        const constraints = {
+            video: {
+                width: 300,
+                height: 300
+            }
+        }
+        navigator.mediaDevices.getUserMedia({
+			video: {
+                width: 300,
+                height: 300
+            }
+		}).then((stream) => {
+			video.srcObject = stream
+			video.onloadedmetadata = () => video.play()
+		})
+        function takePhoto() {
+            ctx.drawImage(video, 0, 0, 300, 300)
+            document.getElementById('imgXX').src = canvas.toDataURL('image/png')
+        };
+    </script>
+</body>
+ 
+</html>

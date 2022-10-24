@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消消乐</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .main {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .cols {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+        .item {
+            display: flex;
+            position: relative;
+            user-select: none;
+            transition: transform .2s, height .2s;
+            /* border: 1px solid; */
+            border-radius: 100%;
+            overflow: hidden;
+        }
+        .small {
+            transform: scale(0.8);
+        }
+        .small-ok {
+            transform: scale(0);
+        }
+        .small-ok-two {
+            height: 0 !important;
+        }
+        .add-hide {
+            transform: scale(0);
+        }
+        .active {
+            opacity: 0.5;
+        }
+        .img {
+            background: no-repeat center center;
+            background-size: 100%;
+            pointer-events: none;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div>当前得分：<label id="score">0</label></div>
+    <div class="main"></div>
+</body>
+<script>
+	/**
+	 * 思路：
+	 * 第一步：准备消消乐水果池子，后续每次消除都从这个池子中取新的
+	 * 第二步：绘制游戏界面
+	 * 第三步：交互事件处理
+	 * 第四步：移动端交互兼容
+	 */ 
+    const main = document.querySelector('.main')
+    const score = document.querySelector('#score')
+    // 基础数据
+    const simpleData = Array.from(new Array(5)).map((v, i) => {
+        return {
+            id: i,
+            url: `./images/llk/${i+1}.png`
+        }
+    })
+    // 行
+    const rows = 8
+    // 列
+    const cols = 6
+    // 尺寸
+    const size = 50
+	// 3个一消除
+    const clearCount = 3
+    const group = 200
+    // 池子的水果总数
+    const renderData = Array.from(new Array(group)).map(v => simpleData).flat().sort(() => Math.random() - 0.5)
+    // 渲染最终的html
+	const renderHtml = []
+	/**
+	 * 生成单个水果格子
+	 * item：单个水果对象
+	 * isElement：是否需要返回element格式
+	 */
+    const getItem = (item, isElement) => {
+		// 如果需要返回element格式，则添加add-hide默认隐藏
+        const html = `<div class="item ${isElement ? 'add-hide' : ''}" data-v="${item.id}" style="width:${size}px;height:${size}px">
+            <div class="img" style="background-image:url(${item.url})"></div>
+        </div>`
+        if (isElement) {
+            const el = document.createElement('div')
+            el.innerHTML = html
+            const itemEl = el.children[0]
+			// 延迟后再把隐藏的样式移除，跑一个动画效果
+            setTimeout(() => {
+                itemEl.classList.remove('add-hide')
+            })
+			// 绑定事件
+            bindEvent(itemEl)
+            return itemEl
+        }
+        return html
+    }
+	// 双重for循环生成消消乐游戏界面
+    for(let i=0;i<cols;i++) {
+        const rowsHtml = [`<div class="cols" data-col="${i}">`]
+        for(let j=0;j<rows;j++) {
+            // 从池子中取水果
+            const item = renderData.pop()
+            if (item) {
+                rowsHtml.push(getItem(item))
+            }
+        }
+        rowsHtml.push('</div>')
+        renderHtml.push(rowsHtml.join(''))
+    }
+    main.innerHTML = renderHtml.join('')
+    main.style.width = `${cols * size}px`
+	// 开关
+    let isDrag = false
+	// 判断是否是移动端
+    const isMobile = navigator.userAgent.match(/Mobile/)
+    const bindEvent = (v) => {
+        v[isMobile ? 'ontouchstart' : 'onmousedown'] = () => {
+            v.classList.add('active')
+            isDrag = true
+        }
+        v.onmouseenter = () => {
+            if (isDrag) {
+                v.classList.add('active')
+            }
+        }
+        v.ontouchmove = (evt) => {
+            const e = evt.touches[0]
+            if (isDrag) {
+                // x,y = touchmove坐标距离游戏面板的位置，而非距离body
+                const x = e.pageX - main.offsetLeft
+                const y = e.pageY - main.offsetTop
+                // r = 每个水果的半径（把水果拟作圆）
+                const r = size / 2
+                // 根据勾股定理，a^2+b^2=c^2，可以计算出touch点距圆中心点的距离
+                const a = Math.abs(x % size - r)
+                const b = Math.abs(x % size - r)
+                const c = Math.sqrt(a * a + b * b)
+                // 如果距离中心点的距离小于半径，那么允许选中
+                if (c < r) {
+                    // 计算出当前位置在第一行，第几列
+                    const xV = Math.ceil(x / size)
+                    const yV = Math.ceil(y / size) - 1
+                    // 通过css选择器找到对应的元素
+                    const item = main.
+                    querySelector(`.cols:nth-child(${xV}) .item:nth-child(${rows - yV})`)
+                    // 执行添加active
+                    item.classList.add('active')
+                }
+            }
+        }
+        v[isMobile ? 'ontouchend': 'onmouseup'] = () => {
+            isDrag = false
+            // 找出所有被选中的水果
+            const list = [...main.querySelectorAll('.active')]
+            // 判断所有选中的水果是不是同一个
+            const result = list.every(el => {
+                return el.getAttribute('data-v') === v.getAttribute('data-v')
+            })
+            // 如果是，并且选中的数量大于设置的消除数量
+            if (result && list.length >= clearCount) {
+                // 达到了消除要求，去除active，并跑一个动画
+                list.forEach(v => {
+                    v.classList.remove('active')
+                    v.classList.add('small-ok')
+                    v.ontransitionend = (e) => {
+                        if (e.propertyName === 'transform') {
+                            v.classList.add('small-ok-two')
+                        } else if (e.propertyName === 'height') {
+                            // 动画跑完，从池子中拿出新的水果
+                            const item = renderData.pop()
+                            if (item) {
+                                // 插入新的水果
+                                v.parentElement.appendChild(getItem(item, true))
+                            }
+                            // 移除已消除的水果
+                            v.remove()
+							score.innerHTML = parseInt(score.innerHTML) + 1
+                        }
+                    }
+                })
+            } else {
+                // 没有达到消除要求，去除active，并跑一个动画
+                list.forEach(v => {
+                    v.classList.remove('active')
+                    v.classList.add('small')
+                    v.ontransitionend = (e) => {
+                        if (e.propertyName === 'transform') {
+                            v.classList.remove('small')
+                        }
+                    }
+                })
+            }
+        }
+    }
+    main.querySelectorAll('.item').forEach(v => {
+        bindEvent(v)
+    })
+	// 当超出游戏区域的时候，就触发mouseup
+	document[isMobile?'ontouchend':'onmouseup'] = () => {
+		const item = document.querySelector('.active')
+		if (item) {
+			item[isMobile?'ontouchend':'onmouseup']()
+		}
+	}
+	// 禁止移动端的下拉效果
+    document.addEventListener('touchmove', (e) => {
+        e.preventDefault()
+    }, {
+        passive: false
+    })
+</script>
+</html>

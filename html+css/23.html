@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        .logo {
+            padding: 20px;
+        }
+        .header {
+            color:#fff;
+            position: sticky;
+            top: 0;
+            height: 40px;
+        }
+        .min.nav{
+            height: 40px;
+        }
+        .min.nav li{
+            padding:0 20px;
+        }
+        .nav {
+            background-color: #333;
+            list-style: none;
+            display: flex;
+            height: 60px;
+            align-items: center;
+            margin:0;
+            transition: height .3s;
+        }
+        .nav li {
+            padding:0 40px;
+            transition: padding .2s;
+        }
+        .content1 {
+            height: 70vh;
+            background-color: green;
+        }
+        .content2 {
+            height: 170vh;
+            background-color: rgb(97, 185, 97);
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">LOGO</div>
+    <div class="header">
+        <ul class="nav">
+            <li>首页</li>
+            <li>列表</li>
+            <li>关于我们</li>
+            <li>联系我们</li>
+        </ul>
+    </div>
+    <div class="content1">1</div>
+    <div class="content2"></div>
+</body>
+<script>
+    const header = document.querySelector('.header')
+    const nav = header.querySelector('.nav')
+    window.onscroll = () => {
+        const rect = header.getBoundingClientRect()
+        if (rect.top === 0) {
+            if (nav.className.indexOf('min') === -1) {
+                nav.classList.add('min')
+            }
+        } else {
+            if (nav.className.indexOf('min') >= 0) {
+                nav.classList.remove('min')
+            }
+        }
+    }
+</script>
+</html>

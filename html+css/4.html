@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自适应弹窗</title>
+    <style>
+        .dialog {
+            background-color: rgba(0, 0, 0 ,0.1);
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .dialog-main {
+            width: 400px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+        }
+        .dialog-title {
+            line-height: 50px;
+            padding-left: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .dialog-content {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            overflow: auto;
+            max-height: calc(100vh - 200px);
+        }
+        .dialog-button {
+            height: 50px;
+            display: flex;
+            justify-content: right;
+            padding-right: 10px;
+            align-items: center;
+        }
+        .button {
+            background-color: #06c;
+            color: #fff;
+            font-size: 14px;
+            border-radius: 5px;
+            padding:5px 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dialog">
+        <div class="dialog-main">
+            <div class="dialog-title">提示</div>
+            <div class="dialog-content">
+                自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗自适应弹窗弹窗
+            </div>
+            <div class="dialog-button">
+                <div class="button">确定</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<view>cookie</view>
+<script>
+    /**
+     * cookie的小知识: 
+     * expires：过期时间
+     * path：设置后在指定path下才能访问到
+     * domain：设置后在指定域名下才能访问
+     * 多cookie：不同域下可以种相同名的cookie
+     * httpOnly：cookie面板能看见，但是无法被js读取
+     * secure：启用时，cookie只会在https下才能被携带
+     * samesite：为none时表示允许在第三方访问例如iframe嵌入
+     * cookie仍然能被携带，
+     */
+    function getCookie(name){
+        const value = document.cookie.split('; ')
+            .filter(v => v.indexOf(name) === 0)
+            .map(v => v.split('=')[1])
+        return value.length === 1 ? value[0] : value
+    }
+</script>

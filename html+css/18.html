@@ -1,0 +1,32 @@
+<input type="file" id="file" />
+<script>
+    /**
+     * 保证请求一定发送成功，即使你关闭浏览器或退出应用
+     * 以post形式发送数据，但无返回值
+     */
+    function getFormData(name) {
+        const file = document.getElementById('file')
+        const fd = new FormData();
+        fd.append('name', name);
+        fd.append('file', file.files[0])
+        return fd
+    }
+    const request1 = () => {
+        navigator.sendBeacon(
+            '/api/send-msg', 
+            getFormData('sendBeacon')
+        )
+    }
+    const request2 = () => {
+        fetch('/api/send-msg', {
+            method: 'POST',
+            body: getFormData('fetch')
+        })
+    }
+    window.onunload = () => {
+        request2()
+        request1()
+    }
+    request2()
+    request1()
+</script>

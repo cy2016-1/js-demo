@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>下载图片</title>
+    
+</head>
+
+<body>
+    <button onclick="downloadByZip()">批量下载图片</button>
+    <div id="imgs"></div>
+</body>
+<script src="./js/jszip.min.js"></script>
+    <script>
+        const download = [
+            './images/3.jpeg',
+            './images/clock.png',
+            './images/hongbao.png',
+            './images/zj-bg.jpeg'
+        ]
+        const downloadByZip = async () => {
+            const zip = new JSZip()
+            for(let i=0;i<download.length;i++) {
+                const blob = await getImgBlob(download[i])
+                zip.file(`${i}.png`, blob, {
+                    base64: true
+                })
+            }
+            zip.generateAsync({
+                type: 'blob',
+            }).then(content => {
+                location.href = URL.createObjectURL(content)
+            })
+        }
+
+        const getImgBlob = (url) => {
+            return new Promise(resolve => {
+                const xhr = new XMLHttpRequest()
+                xhr.open('get', url, true)
+                xhr.responseType = 'blob'
+                xhr.onload = () => {
+                    resolve(xhr.response)
+                }
+                xhr.send()
+            })
+        }
+        
+        imgs.innerHTML = download.map(v => `<img style="height:100px;margin:10px;" src="${v}"/>`).join('')
+    </script>
+
+</html>

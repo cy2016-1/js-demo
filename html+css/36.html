@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- glsl editor -->
+	<meta charset="UTF-8">
+	<title>着色器</title>
+	<script src='https://unpkg.com/shader-doodle@1.0.0-alpha.11'></script>
+	<style>
+		shader-doodle {
+			position: fixed;
+			top: 0;
+			left: 0;
+			height: 100vh;
+			width: 100vw;
+		}
+	</style>
+</head>
+<body>
+<shader-doodle>
+	<script type="x-shader/x-fragment">
+		#define TAU 6.28318530718
+		vec3 hsb2rgb(in vec3 c) {
+			vec3 rgb = clamp(abs(mod(c.x * 6. + vec3(0., 4., 2.), 6.) - 3.) - 1., 0., 1.);
+			rgb = rgb * rgb * (3. - 2. * rgb);
+			return c.z * mix(vec3(1.), rgb, c.y);
+		}
+		vec2 polar(in vec2 st) {
+			vec2 c = vec2(.5) - st;
+			float angle = atan(c.y, c.x) / TAU + .5;
+			float radius = length(c) * 2.;
+			return vec2(angle, radius);
+		}
+		vec2 coverScreen(vec2 fragCoord, vec2 resolution, float aspect) {
+			vec2 uv = .5 * (2. * fragCoord - resolution);
+			if (resolution.x / resolution.y > aspect) {
+			uv = .5 - uv / vec2(resolution.x, -resolution.x / aspect);
+			} else {
+			uv = .5 - uv / vec2(resolution.y * aspect, -resolution.y);
+			}
+			return uv;
+		}
+		void main() {
+			vec2 st = coverScreen(gl_FragCoord.xy, u_resolution, 1.);
+			st.x += sin(st.y * 5. + u_time * 2.) * .2;
+			st = polar(st);
+			st.x = (st.x + st.y * sin(u_time) * .1);
+			st.x = mod(st.x + u_time * .3, 1.);
+			vec3 color = hsb2rgb(vec3(st.x, st.y, 1.));
+			gl_FragColor = vec4(color, 1);
+		}
+	</script>
+</shader-doodle>
+</body>
+
+</html>

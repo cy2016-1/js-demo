@@ -1,0 +1,62 @@
+<div class="map"></div>
+<style id="style1">
+    .map {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .map-item {
+        box-sizing: border-box;
+        background: url(./13/pic.png) no-repeat;
+    }
+    .hide {
+        opacity: 0;
+        pointer-events: none;
+    }
+</style>
+<script>
+    const map = document.querySelector('.map')
+    const rows = 3
+    const cols = 3
+    const size = 120
+    const itemEls = []
+    const posStyle = []
+    const posClsName = []
+    for(let i=0;i<rows;i++) {
+        for(let j=0;j<cols;j++) {
+            itemEls.push(`<div data-v="${i}-${j}" class="map-item" style="width:${size}px;height:${size}px;"></div>`)
+            posStyle.push(`.s${i}-${j}{background-position:${-j*size}px ${-i*size}px}`)
+            posClsName.push(`s${i}-${j}`)
+        }
+    }
+    map.innerHTML = itemEls.join('')
+    map.style.width = `${size * cols}px`
+    posClsName.sort(() => Math.random() - 0.5)
+    const list = [...map.childNodes]
+    list.forEach(el => {
+        el.classList.add(posClsName.shift())
+        el.onclick = () => {
+            const indexs = el.getAttribute('data-v').split('-').map(v => Number(v));
+            [
+                `${indexs[0]-1}-${indexs[1]}`,
+                `${indexs[0]+1}-${indexs[1]}`,
+                `${indexs[0]}-${indexs[1]-1}`,
+                `${indexs[0]}-${indexs[1]+1}`
+            ].forEach(v => {
+                const makeEl = document.querySelector(`[data-v='${v}']`)
+                if (makeEl && makeEl.className.indexOf('hide') >= 0) {
+                    const sCls = makeEl.classList[1]
+                    makeEl.className = `map-item ${el.classList[1]}`
+                    el.className = `map-item ${sCls} hide`
+                }
+            })
+            let isOk = list.every(el => {
+                return ('s' + el.getAttribute('data-v')) === el.classList[1]
+            })
+            if (isOk) {
+                setTimeout(() => alert('拼接成功'))
+            }
+        }
+    })
+    document.querySelector(`.s${rows-1}-${cols-1}`).classList.add('hide')
+    document.getElementById('style1').append(posStyle.join(''))
+</script>

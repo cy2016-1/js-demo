@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>bg code</title>
+</head>
+<body style="margin: 0">
+	<canvas id="cvs" style="background-color: #000;"></canvas>
+</body>
+<script>
+	const cvs = document.querySelector('#cvs')
+	const {clientWidth:width, clientHeight:height} = document.documentElement
+	cvs.width = width
+	cvs.height = height
+	const ctx = cvs.getContext('2d')
+	const text = 'abcdefghijklmnopqrstuvwxyz'
+	ctx.font = '14px 微软雅黑'
+	const bl = 20
+	const startRates = {}
+	const rates = {}
+	const endRates = {}
+	const textObj = {}
+	const animate = () => {
+		ctx.clearRect(0, 0, width, height)
+		for(let i=0;i<width;i+=bl) {
+			ctx.beginPath()
+			const gradient = ctx.createLinearGradient(0, 0, 0, height)
+			const s1 = 0.2 * Math.random()
+			const s2 = 0.8 * Math.random() + 0.2
+			const step = 0.02 * Math.random()
+			rates[i] = rates[i] || -s1
+			endRates[i] = endRates[i] || 0
+			startRates[i] = startRates[i] || -s2
+			gradient.addColorStop(0, '#000000')
+			gradient.addColorStop(startRates[i] < 0 ? 0: startRates[i], '#000000')
+			gradient.addColorStop(rates[i] < 0 ? 0: rates[i], '#0ee30e')
+			gradient.addColorStop(endRates[i], '#000000')
+			gradient.addColorStop(1, '#000000')
+			ctx.fillStyle = gradient
+			for(let j=0;j<height;j+=bl) {
+				textObj[i+'-'+j] = textObj[i+'-'+j] || text[parseInt(Math.random() * text.length)]
+				ctx.fillText(textObj[i+'-'+j], i, j)
+			}
+			rates[i] += step
+			endRates[i] += step
+			startRates[i] += step
+			if (startRates[i] > 1) {
+				startRates[i] = -s2
+			}
+			if(rates[i] >1) {
+				if (startRates[i] === -s2) {
+					rates[i] = -s1
+				} else {
+					rates[i] = 1
+				}
+			}
+			if(endRates[i] >1) {
+				if (rates[i] === -s1 && startRates[i] === -s2) {
+					endRates[i] = step
+				} else {
+					endRates[i] = 1
+				}
+			}
+		}
+		requestAnimationFrame(animate)
+	}
+	animate()
+</script>
+</html>

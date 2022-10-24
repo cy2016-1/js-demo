@@ -1,0 +1,31 @@
+<canvas id="cvs" width="605" height="338"></canvas>
+<style>
+    canvas {
+        background: url(./images/zj.png) no-repeat center center;
+        background-size: 100%;
+    }
+</style>
+<script>
+    const cvs = document.getElementById('cvs')
+    const ctx = cvs.getContext('2d')
+    const url = './images/zj-bg.jpeg'
+    const img = new Image()
+    img.src = url
+    img.onload = () => {
+        ctx.drawImage(img, 0, 0, cvs.width, cvs.height)
+    }
+    let isClearing = false
+    cvs.addEventListener('mousedown', e => {
+        isClearing = true
+    })
+    cvs.addEventListener('mousemove', e => {
+        if (isClearing) {
+            const clearSize = 20
+            ctx.clearRect(e.pageX - clearSize, e.pageY - clearSize, 
+                clearSize, clearSize)
+        }
+    })
+    document.addEventListener('mouseup', e => {
+        isClearing = false
+    })
+</script>

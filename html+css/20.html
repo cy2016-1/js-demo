@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>转盘</title>
+<style>
+    .main {
+        display: flex;
+        width: 320px;
+        flex-wrap: wrap;
+    }
+    .item {
+        width: 100px;
+        height: 100px;
+        background-color: #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #fff;
+    }
+    .item.active {
+        background-color: #999;
+    }
+    .item.btn {
+        background-color: green;
+        color: #fff;
+    }
+</style>
+<script>
+onload = () => {
+const data = {
+    jp: [
+        {
+            name: '代金券1',
+            
+
+        },
+        {
+            name: '代金券2',
+            is: true
+        },
+        {
+            name: '代金券3'
+        },
+        {
+            name: '代金券4'
+        },
+        {
+            name: '代金券5'
+        },
+        {
+            name: '代金券6'
+        },
+        {
+            name: '代金券7'
+        },
+        {
+            name: '代金券8'
+        }
+    ]
+}
+const main = document.querySelector('.main')
+main.innerHTML = 
+    data.jp.map(v => {
+        return `<div class="item" is="${v.is || ''}">
+            ${v.name}</div>`
+    }).join('')
+const el = document.createElement('div')
+el.className = 'item btn'
+el.innerHTML = '抽奖'
+el.onclick = () => {
+    let index = 0
+    let isRuning = true
+    const intervalId = setInterval(() => {
+        const nodeslist = [...main.childNodes].filter(v =>
+                v.className.indexOf('btn') == -1)
+        const list = [0, 1, 2, 4, 7, 6, 5, 3].map(v => {
+            return nodeslist[v]
+        })
+        if (!list[index]) {
+            index = 0
+        }
+        const active1 = main.querySelector('.active')
+        active1 && active1.classList.remove('active')
+        list[index].classList.add('active')
+        if (!isRuning && list[index].getAttribute('is')) {
+            return clearInterval(intervalId)
+        }
+        index++
+        
+    }, 100)
+    setTimeout(() => {
+        isRuning = false
+    }, 3000)
+}
+main.insertBefore(el, main.children[4])
+
+}
+</script>
+</head>
+<body>
+    <div class="main">
+        
+    </div>
+</body>
+</html>

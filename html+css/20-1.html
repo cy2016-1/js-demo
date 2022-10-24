@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>转盘</title>
+<style>
+    .zp {
+        position: relative;
+        border-radius: 100%;
+        width: 300px;
+        overflow: hidden;
+        margin:0 auto;
+    }
+    .zp-panel {
+        background: url(./images/zp.webp) no-repeat center center;
+        background-size: 100%;
+        width: 300px;
+        height: 300px;
+        position: relative;
+        transition: transform 4s ease-out;
+        
+    }
+    .item {
+        font-size: 12px;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        text-align: center;
+        margin-top: -7px;
+        line-height: 1;
+    }
+    .btn {
+        position: absolute;
+        background-color: green;
+        width: 80px;
+        height: 80px;
+        border-radius: 100%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+    }
+    .btn:after {
+        content: '';
+        position: absolute;
+        height: 80px;
+        width: 4px;
+        background-color: green;
+        left: 38px;
+        bottom: 60px;
+    }
+</style>
+
+</head>
+<body>
+    <div class="zp">
+        <div class="zp-panel"></div>
+        <div class="btn">开始</div>
+    </div>
+</body>
+<script>
+    const arr = [
+        {name: '积分+1'},
+        {name: '积分+2'},
+        {name: '积分+3'},
+        {name: '积分+4'},
+        {name: '电动车一辆', is: true},
+        {name: '积分+10'}
+    ]
+    const zp = document.querySelector('.zp-panel')
+    const btn = document.querySelector('.btn')
+    const d = 360 / arr.length
+    zp.innerHTML = arr.map((v, i) => {
+        return `<div class="item" 
+            style="transform:rotate(${i*d - 90}deg) translate(75px)">${v.name}</div>`
+    }).join('')
+    btn.onclick = () => {
+        const zpIndex = arr.findIndex(v => v.is)
+        const deg = -(zpIndex * d + 720)
+        // 清空上次抽奖，暂停动画效果
+        zp.style.transition = 'inherit'
+        zp.style.transform = ''
+        setTimeout(() => {
+            // 重置transition，恢复动画效果
+            zp.style.transition = ''
+            setTimeout(() => {
+                // 触发动画
+                zp.style.transform  = `rotate(${deg}deg)`
+            })
+        })
+    }
+</script>
+</html>

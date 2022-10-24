@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片位置拖拽</title>
+    <style>
+        #main {
+            display: flex;
+            justify-content: center;
+        }
+        .img {
+            width: 100px;
+            user-select: none;
+            height: 100px;
+            background: no-repeat center center;
+            background-size: cover;
+        }
+        
+        .bg1 {
+            background-image:url(./images/hongbao.png)
+        }
+        .bg2 {
+            background-image:url(./images/zp.webp)
+        }
+        .bg3 {
+            background-image:url(./images/3.jpeg)
+        }
+        .zw {
+            background-color: #999;
+            width: 100px;
+            height: 100px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <span class="img bg1" data-index="0"></span>
+        <span class="img bg2" data-index="1"></span>
+        <span class="img bg3" data-index="2"></span>
+        <span class="zw"></span>
+    </div>
+</body>
+<script>
+    const imgs = document.querySelectorAll('.img')
+    const main = document.querySelector('#main')
+    const zw = document.querySelector('.zw')
+    const isMobile = navigator.userAgent.match(/Mobile/)
+    let isDrag = false
+    let index
+    let py = {
+        left: 0,
+        top: 0
+    }
+    const move = (el, x, y) => {
+        el.setAttribute('style', `pointer-events:none;position:absolute;left:${x}px;top:${y}px`)
+    }
+    document.addEventListener(isMobile ? 'touchstart' : 'mousedown', e=> {
+        isMobile && (e = e.touches[0])
+        index = e.target.dataset.index
+        if (index && !isDrag) {
+            py.left = e.pageX - imgs[index].offsetLeft
+            py.top = e.pageY - imgs[index].offsetTop
+            zw.style.display = 'block'
+            main.insertBefore(zw, imgs[index])
+            move(imgs[index], e.pageX - py.left, e.pageY - py.top)
+        }
+        isDrag = true
+    })
+    document.addEventListener(isMobile ? 'touchmove' : 'mousemove', e=> {
+        isMobile && (e = e.touches[0])
+        if (isDrag && index) {
+            move(imgs[index], e.pageX - py.left, e.pageY - py.top)
+        }
+    })
+    document.addEventListener(isMobile ? 'touchend' : 'mouseup', e=> {
+        isDrag = false
+        zw.style.display = ''
+        if (imgs[index]) {
+            imgs[index].setAttribute('style', '')
+            main.insertBefore(imgs[index], zw)
+        }
+    })
+    imgs.forEach(v => {
+        v.addEventListener(isMobile ? 'touchmove' : 'mouseenter', e=> {
+            isMobile && (e = e.touches[0])
+            console.log(1)
+            return
+            if (isDrag) {
+                const list = [...main.children]
+                const imgIndex = list.findIndex(el => v == el)
+                const zwIndex = list.findIndex(el => zw == el)
+                if (zwIndex < imgIndex) {
+                    main.insertBefore(v, zw)
+                } else {
+                    main.insertBefore(zw, v)
+                }
+            }
+        })
+    })
+</script>
+</html>

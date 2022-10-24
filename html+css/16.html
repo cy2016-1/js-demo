@@ -1,0 +1,20 @@
+<button onclick="downloadExcel()">下载excel</button>
+<script src="./excel.js"></script>
+<script>
+    /**
+     * 可定制的excel导出
+     * 1、字体颜色和背景颜色
+     * 2、宽度设置
+     * 3、单元格合并
+     * 4、支持html格式传入
+     */
+    const downloadExcel = () => {
+        JSONToExcelConvertor([
+            {id: 1, name: { value: '<b>章三</b>', color: 'red', width: 100 }, age: 22},
+            {id: 2, name: {value: '<img src="/Users/leizhuo/Desktop/logo_old.png" />',rowspan:2, backgroundColor:'green'}, age: 23},
+            {id: 3, age: 24}
+        ], '用户信息',[
+            'ID', '姓名', '年龄'
+        ])
+    }
+</script>

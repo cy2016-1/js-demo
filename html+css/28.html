@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>迷宫</title>
+    <style>
+        .player {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: green;
+            border-radius: 100%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <canvas width="400" height="400"></canvas>
+    <div class="player"></div>
+</body>
+<script>
+    const cvs = document.querySelector('canvas')
+    const player = document.querySelector('.player')
+    const ctx = cvs.getContext('2d')
+    const { width, height, offsetLeft, offsetTop} = cvs
+    const imageData = {}
+    const img = new Image()
+    img.src = './images/mg-map1.svg'
+    img.onload = () => {
+        ctx.fillStyle = '#ffffff'
+        ctx.fillRect(0, 0, width, height)
+        ctx.drawImage(img, 0, 0, width, height)
+        const data = ctx.getImageData(0, 0, width, height).data
+        let x = 0
+        for(let i=0;i<data.length;i+=4) {
+            if (data[i] !== 255 && data[i+1] !== 255 && data[i+2] !== 255) {
+                imageData[(x % width) + '-' + Math.ceil(x / width)] = true
+            }
+            x++
+        }
+    }
+
+    
+
+    const keys = []
+    document.addEventListener('keydown' , v => {
+        if (v.key.match(/^(w|a|s|d)$/i)) {
+            !keys.includes(v.key) && keys.push(v.key)
+        }
+    })
+    document.addEventListener('keyup' , v => {
+        keys.splice(keys.indexOf(v.key), 1)
+    })
+    const runing = () => {
+        if (keys.length > 0) {
+            let step = 1
+            let top = player.offsetTop
+            let left = player.offsetLeft
+            let key = keys[keys.length - 1]
+            if (key === 'w' && !imageData[`${left - offsetLeft}-${top - step - offsetTop}`]) {
+                player.style.top = top - step + 'px'
+            } else if (key === 's' && !imageData[`${left - offsetLeft}-${top + step - offsetTop}`]) {
+                player.style.top = top + step + 'px'
+            } else if (key === 'a' && !imageData[`${left - step - offsetLeft}-${top - offsetTop}`]) {
+                player.style.left = left - step + 'px'
+            } else if (key === 'd' && !imageData[`${left + step - offsetLeft}-${top - offsetTop}`]) {
+                player.style.left = left + step + 'px'
+            }
+        }
+        requestAnimationFrame(runing)
+    }
+    runing()
+</script>
+</html>
