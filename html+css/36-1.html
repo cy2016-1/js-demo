@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- glsl editor -->
+	<meta charset="UTF-8">
+	<title>着色器</title>
+	<script src='https://unpkg.com/shader-doodle@1.0.0-alpha.11'></script>
+	<style>
+		shader-doodle {
+			position: fixed;
+			top: 0;
+			left: 0;
+			height: 100vh;
+			width: 100vw;
+		}
+	</style>
+</head>
+<body>
+	<shader-doodle>
+		<sd-node name="iChannel0" prevbuffer>
+		  <script type="x-shader/x-fragment">
+			uniform sampler2D u_prevbuffer;
+			
+			#define PI 3.141592
+			#define LOOKUP(COORD) texture2D(u_prevbuffer,(COORD)/u_resolution.xy)
+			
+			vec4 Field (vec2 position) {
+				// Rule 1 : All My Energy transates with my ordered Energy
+				vec2 velocityGuess = LOOKUP (position).xy;
+				vec2 positionGuess = position - velocityGuess;
+				return LOOKUP (positionGuess);
+			}
+	  
+			void mainImage( out vec4 Energy, in vec2 Me )
+			{
+				Energy  =  Field(Me);
+				// Neighborhood :
+				float scale = 1.55;
+				vec4 pX  =  Field(Me + vec2(scale,0));
+				vec4 pY  =  Field(Me + vec2(0,scale));
+				vec4 nX  =  Field(Me - vec2(scale,0));
+				vec4 nY  =  Field(Me - vec2(0,scale));
+	  
+				// Rule 2 : Disordered Energy diffuses completely :
+				Energy.b = (pX.b + pY.b + nX.b + nY.b)/4.;
+	  
+				// Rule 3 : Order in the disordered Energy creates Order :
+				vec2 Force;
+				Force.x = nX.b - pX.b;
+				Force.y = nY.b - pY.b;
+				Energy.xy += (Force/8.); // How much the waves disperse :
+	  
+				// Rule 4 : Disorder in the ordered Energy creates Disorder :
+				Energy.b += (nX.x - pX.x + nY.y - pY.y)/4.;
+	  
+				// Gravity effect :
+				Energy.y -=Energy.w/200.;
+	  
+				// Mass concervation :
+				Energy.w += sin(nX.x*nX.w-pX.x*pX.w+nY.y*nY.w-pY.y*pY.w)/4.;
+	  
+				Energy.b -= sin(Force.y-Force.x)*1.15;
+	  
+				// Mouse Drag movements :
+				vec2 mouse;
+				if(u_mousedrag.w > 1.) {
+					mouse= u_mouse.xy;
+				} else {
+					float sd = 35. + 35. * sin(u_time*.15);
+					float sx = 175. * sin(u_time*2.5);
+					float sy = 85. * cos(u_time*1.5);
+					mouse = vec2(
+					  (u_resolution.x/2.)+sx-sd,
+					  (u_resolution.y/2.)+sy-sd
+					);
+				}
+			  
+				// Generate Shape :
+				float size = 45.+ (5.+5.*sin(u_time*10.));
+				float shapes = length(Me-mouse.xy);
+	  
+				// Edge Boundary :
+				if(Me.x<20.||Me.y<20.||u_resolution.x-Me.x<20.||u_resolution.y-Me.y<20.) {
+					Energy.xy *= 0.1;
+				} else {
+					if (shapes < size) {
+						Energy.w = 1.;
+					}
+				}
+	  
+			}
+			
+			void main(void) {
+			  mainImage(gl_FragColor, gl_FragCoord.xy);
+			}
+	  
+		  </script>
+		</sd-node>
+	  
+		<script type="x-shader/x-fragment">
+		  uniform sampler2D iChannel0;
+		  
+		  #define LOOKUP(COORD) texture2D(iChannel0,(COORD)/u_resolution.xy)
+		  #define r(x) fract(sin(x * star) * 56.)
+		  
+		  void main() {
+			  vec2 uv = (2.*gl_FragCoord.xy-u_resolution.xy)/
+			  max(u_resolution.x,u_resolution.y);
+		  
+			  vec4 color = LOOKUP (gl_FragCoord.xy);
+			
+			  vec3 newColor = vec3(
+				  smoothstep(0.4,.9,color.w),
+				  smoothstep(0.,.3,color.w*2.),
+				  smoothstep(0.1,.6,color.w)
+			  );
+			  // Color Mixdown :
+			  newColor = clamp(color.www,color.rgb,newColor);
+			
+			  // Cheap Stars :
+			  for (float star = 0.; star != 323.; ++star) {
+				  newColor += vec3(1.) * smoothstep(1.8 / u_resolution.x, 0., 
+				  length((uv*.5+.5) - fract(vec2(
+					  r(star) * (u_resolution.x+sin(u_time*.015)),
+					  r(star) * (u_resolution.y+u_time*.02)
+				  ))));
+			  }
+		  
+			  gl_FragColor = vec4(newColor,1.);
+		  }
+		</script>
+	  
+	  </shader-doodle>
+</body>
+
+</html>

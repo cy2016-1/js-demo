@@ -1,51 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta charset="UTF-8">
+    <title>Promise案例之弹窗封装</title>
+    <head>
+    <!-- Import style -->
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <!-- Import Vue 3 -->
+    <script src="//unpkg.com/vue@3"></script>
+    <!-- Import component library -->
+    <script src="//unpkg.com/element-plus"></script>
+    </head>
 </head>
-<style>
-    #box{
-        width: 100px;
-        height: 100px;
-        background-color: yellow;
-    }
-</style>
 <body>
-    <div id="box"></div>
+    
 </body>
-
 <script>
-    let count = 0;
-
-    let box = document.getElementById("box");
-
-    function hh() {
-        box.innerHTML = count++;
-    }
-
-   box.onclick=() => {
-    tt(hh,1000)
-   }
-
-    function tt(fn, wait) {
-        let old = 0;
-        console.log("执行");
-        return function (e) {
-            let that = this;
-            let args = arguments;
-            let now = +new Date();
-            console.log("now为:",now);
-            console.log("old为:",old);
-            if (now - old > wait) {
-                fn.apply(that);
-                old = now;
-            }
-        };
-    }
+    
 </script>
-L  17:30:30
-大大
+</html>

@@ -13,4 +13,4 @@ var result = C.AES.decrypt(C.enc.Base64.parse(ciphertext), C.enc.Utf8.parse(strK
 
 // var result = C.AES.decrypt(C.lib.CipherParams.create({ ciphertext: C.enc.Hex.parse(ciphertext) }), C.enc.Hex.parse(strKey), { mode: C.mode.ECB, padding: C.pad.Pkcs7 }).toString()
 
-console.log(ciphertext, result)
+console.log(ciphertext, '---', result)
