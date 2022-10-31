@@ -38,4 +38,5 @@
 * html+css/35.html 代码背景墙特效
 * html+css/36.html 着色器
 * html+css/37.html 摄像头拍照
+* html+css/37-1.html 摄像头拍登记照（可切换底色）
 * html+css/38.html 摄像头录制
