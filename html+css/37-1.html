@@ -9,16 +9,21 @@
 <body>
     <div id="contentHolder">
 		<video id="video" autoplay style="background-color: #000"></video>
-		<canvas id="canvas" style="display: none;"></canvas>
+		<canvas id="canvas"></canvas>
+        <canvas id="canvas_bg"></canvas>
 		<img id="imgXX" src="" />
 	</div>
 	<button id="btn_snap" onclick="takePhoto()">拍照</button>
+    <script src="./js/tf.min.js"></script>
+    <script src="./37.js"></script>
     <script>
         const cvs = document.getElementById('canvas')
         const video = document.getElementById('video')
-        cvs.width = cvs.height = video.width = video.height = 400
+        const canvasBg = document.getElementById('canvas_bg')
+        cvs.width = cvs.height = video.width = video.height = canvasBg.width = canvasBg.height = 400
         const {width, height} = cvs
 		const ctx = cvs.getContext('2d')
+        const ctxBg = canvasBg.getContext('2d')
         
         const constraints = {
             video: {
@@ -29,9 +34,16 @@
         navigator.mediaDevices.getUserMedia(constraints).then(stream => {
             video.srcObject = stream
             video.onloadedmetadata = () => video.play()
+            
+            ctxBg.fillStyle = '#06c'
+            ctxBg.fillRect(0, 0, width, height)
+            const renderVideo = () => {
+                ctx.drawImage(video, 0, 0, width, height)
+                requestAnimationFrame(renderVideo)
+            }
+            renderVideo()
         })
         function takePhoto() {
-            ctx.drawImage(video, 0, 0, width, height)
             document.getElementById('imgXX').src = canvas.toDataURL('image/png')
         }
 
