@@ -40,3 +40,4 @@
 * html+css/37.html 摄像头拍照
 * html+css/37-1.html 摄像头拍登记照（可切换底色）
 * html+css/38.html 摄像头录制
+* html+css/39.html 手电筒效果
