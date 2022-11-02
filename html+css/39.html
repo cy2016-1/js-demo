@@ -43,5 +43,10 @@
         ctx.fillRect(0,0,cvs.width, cvs.height);
     }
     render()
+    window.onresize = () => {
+        cvs.width = document.documentElement.clientWidth
+        cvs.height = document.documentElement.clientHeight
+        render()
+    }
 </script>
 </html>
