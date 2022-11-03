@@ -87,8 +87,6 @@
     imgs.forEach(v => {
         v.addEventListener(isMobile ? 'touchmove' : 'mouseenter', e=> {
             isMobile && (e = e.touches[0])
-            console.log(1)
-            return
             if (isDrag) {
                 const list = [...main.children]
                 const imgIndex = list.findIndex(el => v == el)
