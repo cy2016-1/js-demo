@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>canvas撤销与恢复</title>
+</head>
+<style>
+</style>
+<body>
+    <canvas id="cvs" width="800" height="500" style="background-color:#eee;"></canvas>
+    <script>
+        const cvs = document.getElementById('cvs')
+        const ctx = cvs.getContext('2d')
+        let saveData = []
+        let revokeData = []
+        let isDrawing = false
+        cvs.addEventListener('mousedown', e => {
+            isDrawing = true
+            ctx.moveTo(e.pageX, e.pageY)
+            saveData.push({
+                move: [e.pageX, e.pageY],
+                line: []
+            })
+        })  
+        cvs.addEventListener('mousemove', e => {
+            if (isDrawing) {
+                ctx.lineWidth = 10
+                ctx.lineTo(e.pageX, e.pageY)
+                ctx.stroke()
+                saveData[saveData.length - 1].line.push([e.pageX, e.pageY])
+            }
+        })
+        cvs.addEventListener('mouseup', e => {
+            isDrawing = false
+        })
+        document.onkeyup = e => {
+            const key = e.key.toLocaleLowerCase()
+            if (e.ctrlKey && (key === 'z' || key === 'y')) {
+                if (key === 'z') {
+                    saveData.length && revokeData.push(saveData.pop())
+                } else if (key === 'y') {
+                    revokeData.length && saveData.push(revokeData.pop())
+                }
+                ctx.clearRect(0, 0, cvs.width, cvs.height)
+                ctx.beginPath()
+                saveData.forEach(v => {
+                    ctx.moveTo(v.move[0], v.move[1])
+                    v.line.forEach(k => {
+                        ctx.lineTo(k[0], k[1])
+                    })
+                    ctx.stroke()
+                })
+            }
+        }
+    </script>
+</body>
+</html>
