@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汉字找不同</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        .box {
+            display: flex;
+            flex-wrap: wrap;
+            border:1px solid #ddd;
+        }
+        .item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border:1px solid #ddd;
+        }
+        .title {
+            text-align: center;
+        }
+        .btn {
+            display: block;
+            margin: 10px auto 0
+        }
+    </style>
+</head>
+<style>
+</style>
+<body>
+    <div class="title"></div>
+    <div class="box"></div>
+    <button class="btn" onclick="onFind()">提示</button>
+</body>
+<script>
+    const boxEl = document.querySelector('.box')
+    const titleEl = document.querySelector('.title')
+    const texts = [
+       {text: '人', find: '入'},
+       {text: '大', find: '犬'},
+       {text: '日', find: '曰'}
+    ]
+    let index = 0
+    // ui渲染
+    const render = () => {
+        const rows = 10
+        const cols = 10
+        const size = boxEl.clientWidth / cols
+        // 随机汉字
+        const randomIndex = Math.ceil(Math.random() * rows * cols)
+        const result = new Array(rows * cols).fill('').map((v, i) => {
+            const text = randomIndex === i ? texts[index].find : texts[index].text
+            return `<div class="item" data-value="${text}" style="width:${size}px;height:${size}px;" 
+                onclick="onClick(this)">
+                ${text}
+            </div>`
+        }).join('')
+        boxEl.innerHTML = result
+        titleEl.innerHTML = `从${texts[index].text}中找出：${texts[index].find}`
+    }
+    // 选择汉字，如果成功找出就提示
+    const onClick = (me) => {
+        if (me.innerHTML.trim() === texts[index].find) {
+            if (index === texts.length - 1) {
+                return alert('恭喜你通关了')
+            }
+            alert('恭喜你找到了，马上下一关~')
+            index++
+            render()
+        }
+    }
+    // 直接提示正确答案
+    const onFind = () => {
+        const item = boxEl.querySelector(`.item[data-value="${texts[index].find}"]`)
+        item.style.backgroundColor = '#aaa'
+    }
+    render()
+</script>
+</html>

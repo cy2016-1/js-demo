@@ -47,7 +47,9 @@
         mf.innerHTML = result.join('')
         mf.style.width = `${cols * size}px`
         document.addEventListener('keydown', e=> {
-            key = e.key
+            if(e.key.match(/^w|a|s|d$/)) {
+                key = e.key
+            }
         })
         const intervalId = setInterval(() => {
             if (key) {

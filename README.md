@@ -42,3 +42,4 @@
 * html+css/38.html 摄像头录制
 * html+css/39.html 手电筒效果
 * html+css/40.html canvas撤销与恢复
+* html+css/41.html 汉字找不同小游戏

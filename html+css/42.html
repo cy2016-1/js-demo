@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9宫格翻牌抽奖</title>
+    <style>
+        .box {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #eee;
+            margin: 5px;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<style>
+</style>
+<body>
+    <div class="box"></div>
+</body>
+<script>
+    const list = [
+        {id: 1, name: '1元优惠券'},
+        {id: 2, name: '10元优惠券'},
+        {id: 3, name: '谢谢惠顾'},
+        {id: 4, name: '电动车'},
+        {id: 5, name: '1000购物券'},
+        {id: 6, name: '500购物券'},
+        {id: 7, name: '300购物券'},
+        {id: 8, name: '液晶电视'},
+        {id: 9, name: '顶配笔记本'}
+    ]
+    const box = document.querySelector('.box')
+    box.innerHTML = list.map(v => {
+        return `<div class="item" onclick="fp(this)"></div>`
+    }).join('')
+
+    const fp = (me) => {
+        me.classList.add('run')
+    }
+</script>
+</html>
