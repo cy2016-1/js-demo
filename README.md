@@ -24,7 +24,7 @@
 * html+css/20-1.html 转盘效果2
 * html+css/21.html 羊了个羊
 * html+css/22.html 刮刮乐
-* html+css/24.html canvas生成朋友圈海报
+* html+css/24.html 图片合并
 * html+css/26.html 扫雷小游戏
 * html+css/27.html 批量下载图片
 * html+css/28.html 迷宫
