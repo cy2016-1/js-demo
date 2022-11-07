@@ -1,51 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>9宫格翻牌抽奖</title>
-    <style>
-        .box {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .item {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #eee;
-            margin: 5px;
-            width: 100px;
-            height: 100px;
-        }
-    </style>
+    <title>postMessage parent</title>
 </head>
-<style>
-</style>
-<body>
-    <div class="box"></div>
-</body>
-<script>
-    const list = [
-        {id: 1, name: '1元优惠券'},
-        {id: 2, name: '10元优惠券'},
-        {id: 3, name: '谢谢惠顾'},
-        {id: 4, name: '电动车'},
-        {id: 5, name: '1000购物券'},
-        {id: 6, name: '500购物券'},
-        {id: 7, name: '300购物券'},
-        {id: 8, name: '液晶电视'},
-        {id: 9, name: '顶配笔记本'}
-    ]
-    const box = document.querySelector('.box')
-    box.innerHTML = list.map(v => {
-        return `<div class="item" onclick="fp(this)"></div>`
-    }).join('')
 
-    const fp = (me) => {
-        me.classList.add('run')
-    }
+<body>
+    <h1>parent</h1>
+    <button id="btn">btn</button>
+    <iframe src="http://192.168.2.36:5500/html+css/42-1.html" frameborder="0" id="iframe1"></iframe>
+</body>
+<script src="./42.js"></script>
+<script>
+    const iframe1 = document.getElementById('iframe1')
+    PostMessage.create(iframe1).then(() => {
+        PostMessage.register('getUserInfo', () => {
+            return {
+                id: 1,
+                name: '小明',
+                phone: '19999999999'
+            }
+        })
+        document.getElementById('btn').onclick = () => {
+            PostMessage.postIframe('getMore', {a: 1}).then(res => {
+                console.log(res)
+            })
+        }
+    })
+    
+    // iframe1.onload = () => {
+    //     window.addEventListener("message", evt => {
+    //         const { type } = evt.data
+    //         if (type === 'getUserInfo') {
+    //             iframe1.contentWindow.postMessage({
+    //                 type: 'sendUserInfo',
+    //                 data: {
+    //                     id: 1,
+    //                     name: '小明',
+    //                     phone: '19999999999'
+    //                 }
+    //             }, iframe1.src)
+    //         }
+    //     }, false)
+    //     iframe1.contentWindow.postMessage({
+    //         type: 'sendUrl',
+    //         data: location.href
+    //     }, iframe1.src)
+    // }
 </script>
+
 </html>

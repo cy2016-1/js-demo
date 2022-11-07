@@ -15,7 +15,7 @@
  * 4
  * 
  */
-const arr = [1, 2, 3, 4, 5]
+const arr = '123456789hijklmnopq'.split('')
 const result = []
 const loop = (arr, i, prev) => {
     if (i < arr.length - 1) {
@@ -30,28 +30,15 @@ for(let i=0;i<arr.length;i++) {
     result.push(arr[i].toString())
     loop(arr, i, [arr[i]])
 }
-console.log(result)
+console.log(result, result.length)
 
 // const arr = [1, 2, 3, 4, 5];
-const set = new Set();
-let count2 = 0
-for (let i = 1; i <= arr.length; i++) {
-  for(let k=0;k<arr.length;k++) {
-    recursion('', k, i);
-  }
+
+const result2 = ['']
+for(let i=0;i<arr.length;i++) {
+  const tmp = result2.map(r => r + arr[i])
+  tmp.forEach(v => {
+    result2.push(v)
+  })
 }
-function recursion(text, curIndex, targetLength) {
-  if (text.length === targetLength || arr[curIndex] === undefined) {
-    count2++
-    return set.add(text)
-  } else {
-    for (let i = curIndex + 1; i <= arr.length; i++) {
-      count2++
-      recursion(text + String(arr[curIndex]), i, targetLength);
-    }
-  }
-}
-// for (let value of set) {
-//   console.log(value)
-// }
-console.log([...set].length, count2)
+console.log(result2.length)
