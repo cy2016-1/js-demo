@@ -43,4 +43,5 @@
 * html+css/39.html 手电筒效果
 * html+css/40.html canvas撤销与恢复
 * html+css/41.html 汉字找不同小游戏
+* html+css/42.html postMessage sdk封装
 * html+css/43.html 9宫格翻牌抽奖
