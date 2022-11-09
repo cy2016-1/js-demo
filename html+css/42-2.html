@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>postMessage openPage</title>
+</head>
+
+<body>
+    <h1>open</h1>
+    <button id="btn">往来源页发送消息</button>
+</body>
+<script src="./42.js"></script>
+<script>
+    new PostMessage().connect(window.opener).then((sdk) => {
+        document.getElementById('btn').onclick = () => {
+            
+            sdk.postParent('tabData', {name: 'tabData'}).then(res => {
+                console.log(res)
+            })
+        }
+    })
+
+    function openPage() {
+        const win = open('./42-2.html')
+        new PostMessage().create(win).then((sdk) => {
+            sdk.register('tabData', res => {
+                console.log('tabData', res)
+                return {
+                    name: 'abc'
+                }
+            })
+        })
+    }
+</script>
+
+</html>

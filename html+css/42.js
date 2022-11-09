@@ -1,15 +1,21 @@
-const PostMessage = {
-    callList: [],
-    parentPath: '',
-    postParentList: [],
-    postIframeList: [],
-    ifr: null,
+class PostMessage {
+    callList = []
+    parentPath = ''
+    postParentList = []
+    postIframeList = []
+    ifr = null
+    openWin = null
+    openUrl = ''
+    constructor() {
+        
+    }
     connect(pt) {
+        this.pt = pt
         return new Promise((resolve, reject) => {
             window.addEventListener("message", evt => {
                 const { type, data } = evt.data
                 this.callList.filter(v => v.name === type).forEach(v => {
-                    window.parent.postMessage({
+                    this.pt.postMessage({
                         type: v.name,
                         data: v.call(data)
                     }, this.parentPath)
@@ -17,46 +23,53 @@ const PostMessage = {
                 this.postParentList.filter(v => v.name === type).forEach(v => {
                     v.resolve(data)
                 })
-                if (type === 'sendUrl') {
+                if (top !== window && type === 'sendUrl') {
                     this.parentPath = data
-                    resolve()
+                    resolve(this)
                 }
             }, false)
+            if (top === window) {
+                this.parentPath = pt.location.href
+                resolve(this)
+            }
         })
-    },
+    }
     postParent(name, params) {
         return new Promise((resolve) => {
             this.postParentList.push({
                 name,
                 resolve
             })
-            window.parent.postMessage({
+            
+            this.pt.postMessage({
                 type: name,
                 data: params
             }, this.parentPath)
         })
-    },
+    }
     postIframe(name, params) {
         return new Promise((resolve) => {
             this.postIframeList.push({
                 name,
                 resolve
             })
-            this.ifr.contentWindow.postMessage({
+            this.openWin.postMessage({
                 type: name,
                 data: params
-            }, this.ifr.src)
+            }, this.openUrl)
         })
-    },
+    }
     create(ifr) {
         this.ifr = ifr
         return new Promise((resolve) => {
             ifr.addEventListener('load', e => {
-                ifr.contentWindow.postMessage({
+                this.openWin = ifr.contentWindow ? ifr.contentWindow : ifr
+                this.openUrl = ifr.src || ifr.location.href
+                this.openWin.postMessage({
                     type: 'sendUrl',
                     data: location.href
-                }, ifr.src)
-                resolve()
+                }, this.openUrl)
+                resolve(this)
             })
             window.addEventListener('message', evt => {
                 const { type, data } = evt.data
@@ -65,15 +78,15 @@ const PostMessage = {
                 })
                 for(const n of this.callList) {
                     if (type === n.name) {
-                        iframe1.contentWindow.postMessage({
+                        this.openWin.postMessage({
                             type: n.name,
                             data: n.call(data)
-                        }, iframe1.src)
+                        }, this.openUrl)
                     }   
                 }
             }, false)
         })
-    },
+    }
     register(path, call) {
         this.callList.push({
             name: path,

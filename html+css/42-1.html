@@ -17,21 +17,21 @@
 </body>
 <script src="./42.js"></script>
 <script>
-    PostMessage.connect(window.parent).then(() => {
+    new PostMessage().connect(window.parent).then((sdk) => {
         document.getElementById('btnUser').onclick = () => {
-            PostMessage.postParent('getUserInfo', {}).then(res => {
+            sdk.postParent('getUserInfo', {}).then(res => {
                 console.log(res)
             })
         }
-        PostMessage.register('getMore', e => {
+        sdk.register('getMore', data => {
             return {
                 name: 'abc',
-                ...e
+                ...data
             }
         })
     })
     // let parentPath = ''
-    // function getUserInfo() {
+    // document.getElementById('btnUser').onclick = () => {
     //     window.parent.postMessage({
     //         type: 'getUserInfo'
     //     }, parentPath)
@@ -42,6 +42,14 @@
     //         console.log(data)
     //     } else if (type === 'sendUrl') {
     //         parentPath = data
+    //     } else if (type === 'getMore') {
+    //         window.parent.postMessage({
+    //             type: 'getMore',
+    //             data: {
+    //                 name: 'abc',
+    //                 ...data
+    //             }
+    //         }, parentPath)
     //     }
     // }, false)
 </script>

@@ -10,14 +10,15 @@
 
 <body>
     <h1>parent</h1>
-    <button id="btn">btn</button>
-    <iframe src="http://192.168.2.36:5500/html+css/42-1.html" frameborder="0" id="iframe1"></iframe>
+    <button id="btn">获取iframe信息</button> <button onclick="openPage()">打开新页面</button>
+    <br><br>
+    <iframe src="./42-1.html" id="iframe1"></iframe>
 </body>
 <script src="./42.js"></script>
 <script>
     const iframe1 = document.getElementById('iframe1')
-    PostMessage.create(iframe1).then(() => {
-        PostMessage.register('getUserInfo', () => {
+    new PostMessage().create(iframe1).then((sdk) => {
+        sdk.register('getUserInfo', () => {
             return {
                 id: 1,
                 name: '小明',
@@ -25,7 +26,7 @@
             }
         })
         document.getElementById('btn').onclick = () => {
-            PostMessage.postIframe('getMore', {a: 1}).then(res => {
+            sdk.postIframe('getMore', {a: 1}).then(res => {
                 console.log(res)
             })
         }
@@ -33,18 +34,28 @@
     
     // iframe1.onload = () => {
     //     window.addEventListener("message", evt => {
-    //         const { type } = evt.data
+    //         const { type, data } = evt.data
     //         if (type === 'getUserInfo') {
     //             iframe1.contentWindow.postMessage({
-    //                 type: 'sendUserInfo',
+    //                 type: 'getUserInfo',
     //                 data: {
     //                     id: 1,
     //                     name: '小明',
     //                     phone: '19999999999'
     //                 }
     //             }, iframe1.src)
+    //         } else if (type === 'getMore') {
+    //             console.log(data)
     //         }
     //     }, false)
+    //     document.getElementById('btn').onclick = () => {
+    //         iframe1.contentWindow.postMessage({
+    //             type: 'getMore',
+    //             data: {
+    //                 a: 1
+    //             }
+    //         }, iframe1.src)
+    //     }
     //     iframe1.contentWindow.postMessage({
     //         type: 'sendUrl',
     //         data: location.href
