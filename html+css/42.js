@@ -22,6 +22,7 @@ class PostMessage {
                 })
                 this.postParentList.filter(v => v.name === type).forEach(v => {
                     v.resolve(data)
+                    this.postParentList.splice(this.postParentList.indexOf(v), 1)
                 })
                 if (top !== window && type === 'sendUrl') {
                     this.parentPath = data
@@ -75,6 +76,7 @@ class PostMessage {
                 const { type, data } = evt.data
                 this.postIframeList.filter(v => v.name === type).forEach(v => {
                     v.resolve(data)
+                    this.postIframeList.splice(this.postIframeList.indexOf(v), 1)
                 })
                 for(const n of this.callList) {
                     if (type === n.name) {
