@@ -4,185 +4,170 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>力导向</title>
+    <title>现学现用</title>
+    <style>
+        iframe {
+            position: absolute;
+            left: 160px;
+            width: calc(100vw - 615px);
+            top: 8px;
+            height: 400px;
+        }
+        .info {
+            font-size: 12px;
+            color: #999;
+            width: 150px;
+            margin-bottom: 6px;
+        }
+    </style>
 </head>
 <body>
-    <script type="text/javascript" src="http://d3js.org/d3.v5.min.js"></script>
-<script>
-    var width = 800;
-    var height = 800;
-    var svg = d3.select("body")
-        .append("svg")
-        .attr("width",width)
-        .attr("height",height);
- 
-    var marge = {top:10,bottom:10,left:10,right:10}
- 
-    var g = svg.append("g")
-        .attr("transform","translate("+marge.top+","+marge.left+")");
- 
-    //准备数据
-    var nodes = [//节点集
-        {name:"陕西省",group:2.5},
-        {name:"西安市",group:2},
-        {name:"安康市",group:2},
-        {name:"咸阳市",group:2},
-        {name:"宝鸡市",group:2},
-        {name:"铜川市",group:2},
-        {name:"商洛市",group:2},
-        {name:"汉中市",group:2},
-        {name:"延安市",group:2},
-        {name:"兴平市",group:2},
-        {name:"碑林区",group:1.5},
-        {name:"未央区",group:1.5},
-        {name:"莲湖区",group:1.5},
-        {name:"新城区",group:1.5},
-        {name:"户县",group:1.5},
-        {name:"祖庵镇",group:1},
-        {name:"甘河镇",group:1},
-        {name:"蒋村镇",group:1},
-    ];
-    var edges = [//边集
-        {source:0,target:1,value:2},  //value控制线的长短
-        {source:0,target:2,value:2},
-        {source:0,target:3,value:2},
-        {source:0,target:4,value:2},
-        {source:0,target:5,value:2},
-        {source:0,target:6,value:2},
-        {source:0,target:7,value:2},
-        {source:0,target:8,value:2},
-        {source:0,target:9,value:2},
-        {source:1,target:10,value:1.5},
-        {source:1,target:11,value:1.5},
-        {source:1,target:12,value:1.5},
-        {source:1,target:13,value:1.5},
-        {source:1,target:14,value:1.5},
-        {source:14,target:15,value:1},
-        {source:14,target:16,value:1},
-        {source:14,target:17,value:1},
-    ];
-   
-    //设置一个color的颜色比例尺，为了让不同的扇形呈现不同的颜色
-    var colorScale = d3.scaleOrdinal()
-        .domain(d3.range(nodes.length))
-        .range(d3.schemeCategory10);
- 
- 
-    var forceSimulation = d3.forceSimulation()
-        .force("link",d3.forceLink())
-        .force("charge",d3.forceManyBody())
-        .force("center",d3.forceCenter());
-    //生成节点数据
-    forceSimulation.nodes(nodes)
-        .on("tick",ticked);//这个函数很重要，后面给出具体实现和说明
-    //生成边数据
-    forceSimulation.force("link")
-        .links(edges)
-        .distance(function(d){//每一边的长度
-            return d.value*100;
-        })
-    //设置图形的中心位置
-    forceSimulation.force("center")
-        .x(width/2)
-        .y(height/2);
-    //在浏览器的控制台输出
-    console.log(nodes);
-    console.log(edges);
-    //绘制边
-    var links = g.append("g")
-        .selectAll("line")
-        .data(edges)
-        .enter()
-        .append("line")
-        .attr("stroke",function(d,i){
-            return colorScale(d.value);   //边的颜色
-            //return "#ccc";
-        })
-        .attr("stroke-width",1);
-    //边上文字
-    var linksText = g.append("g")
-        .selectAll("text")
-        .data(edges)
-        .enter()
-        .append("text")
-        .text(function(d){
-            return d.relation;
-        })
-    //建立用来放在每个节点和对应文字的分组<g>
-    var gs = g.selectAll(".circleText")
-        .data(nodes)
-        .enter()
-        .append("g")
-        .attr("transform",function(d,i){
-            var cirX = d.x;
-            var cirY = d.y;
-            return "translate("+cirX+","+cirY+")";
-        })
-        .call(d3.drag()
-            .on("start",started)
-            .on("drag",dragged)
-            .on("end",ended)
-        );
- 
-    //绘制节点
-    gs.append("circle")
-       // .attr("r",20)
-        .attr("r",function (d,i) {    //圆圈半径
-            return d.group*15;
-        })
-        .attr("fill",function(d,i){
-            //return colorScale(i);
-            return colorScale(d.group);
-        })
-    //文字
-    gs.append("text")
-        /*.attr("x",-10)
-        .attr("y",-20)
-        .attr("dy",10)*/
-        .attr("x",-25)
-        .attr("y",-5)
-        .attr("dy",10)
-        .text(function(d){
-            return d.name;
-        })
-    function ticked(){
-        links
-            .attr("x1",function(d){return d.source.x;})
-            .attr("y1",function(d){return d.source.y;})
-            .attr("x2",function(d){return d.target.x;})
-            .attr("y2",function(d){return d.target.y;});
- 
-        linksText
-            .attr("x",function(d){
-                return (d.source.x+d.target.x)/2;
-            })
-            .attr("y",function(d){
-                return (d.source.y+d.target.y)/2;
-            });
- 
-        gs
-            .attr("transform",function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-    }
-    //drag
-    function started(d){
-        if(!d3.event.active){
-            forceSimulation.alphaTarget(0.8).restart();//设置衰减系数，对节点位置移动过程的模拟，数值越高移动越快，数值范围[0，1]
-        }
-        d.fx = d.x;
-        d.fy = d.y;
-    }
-    function dragged(d){
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
-    }
-    function ended(d){
-        if(!d3.event.active){
-            forceSimulation.alphaTarget(0);
-        }
-        d.fx = null;
-        d.fy = null;
-    }
- 
-</script>
+    <div class="info">场景：心中有事情犹豫不决时，丢上6次获得卦辞</div>
+    <div>
+        <button onclick="createGua()">丢卦(<label id="guaIndex">6</label>)</button>
+        <button onclick="reset()">重新开始</button>
+    </div>
+    <pre id="desc"></pre>
+    <canvas width="120" height="140" id="cvs"></canvas>
+    <iframe src="about:blank" id="ifr1"></iframe>
 </body>
+<script>
+    const guaObj = {
+        '111111': '乾为天',
+        '011111': '天风姤',
+        '001111': '天山遁',
+        '000111': '天地否',
+        '000011': '风地观',
+        '000001': '山地剥',
+        '000101': '火地晋',
+        '111101': '火天大有',
+        '010010': '坎为水',
+        '110010': '水泽节',
+        '100010': '水雷屯',
+        '101010': '水火既济',
+        '101110': '泽火革',
+        '101100': '雷火丰',
+        '101000': '地火明夷',
+        '010000': '地水师',
+        '001001': '艮为山',
+        '101001': '山火贲',
+        '111001': '山天大畜',
+        '110001': '山泽损',
+        '110101': '火泽睽',
+        '110111': '天泽履',
+        '110011': '风泽中孚',
+        '001011': '风山渐',
+        '100100': '震为雷',
+        '000100': '雷地豫',
+        '010100': '雷水解',
+        '011100': '雷风恒',
+        '011000': '地风升',
+        '011010': '水风井',
+        '011110': '泽风大过',
+        '100110': '泽雷随',
+        '011011': '巽为风',
+        '111011': '风天小畜',
+        '101011': '风火家人',
+        '100011': '风雷益',
+        '100111': '天雷无妄',
+        '100101': '火雷噬嗑',
+        '100001': '山雷颐',
+        '011001': '山风蛊',
+        '101101': '离为火',
+        '001101': '火山旅',
+        '011101': '火风鼎',
+        '010101': '水火未济',
+        '010001': '山水蒙',
+        '010011': '风水涣',
+        '010111': '天水讼',
+        '101111': '天火同人',
+        '000000': '坤为地',
+        '100000': '地雷复',
+        '110000': '地泽临',
+        '111000': '地天泰',
+        '111100': '雷天大壮',
+        '111110': '泽天夬',
+        '111010': '水天需',
+        '000010': '水地比',
+        '110110': '兑为泽',
+        '010110': '泽水困',
+        '000110': '泽地萃',
+        '001110': '泽山咸',
+        '001010': '水山蹇',
+        '001000': '地山谦',
+        '001100': '雷山小过',
+        '110100': '雷泽归妹',
+    }
+    const cvs = document.getElementById('cvs')
+    const ctx = cvs.getContext('2d')
+    const guaIndexEl = document.getElementById('guaIndex')
+    const descEl = document.getElementById('desc')
+    const ifr1 = document.getElementById('ifr1')
+    const {width, height} = cvs
+    let guaIndex = +guaIndexEl.innerHTML
+    let result = []
+    // 计算卦的公式
+    const getGua = () => {
+        const a = Math.random() > 0.5 ? 3 : 2
+        const b = Math.random() > 0.5 ? 3 : 2
+        const c = Math.random() > 0.5 ? 3 : 2
+        descEl.innerHTML = `${a === 3 ? '阳':'阴'}\t${b === 3 ? '阳':'阴'}\t${c === 3 ? '阳':'阴'}`
+        return a + b + c
+    }
+    // 丢卦事件
+    const createGua = () => {
+        if (guaIndex > 0) {
+            guaIndex--
+            result.push(getGua())
+            guaIndexEl.innerHTML = guaIndex
+            render()
+            if (guaIndex === 0) {
+                const name = guaObj[result.map(v => (v === 6 || v === 8) ? 0 : 1).join('')]
+                descEl.innerHTML = `卦名：${name}`
+                ifr1.src = `https://baike.baidu.com/item/${name}?fromModule=lemma_search-box`
+            }
+        }
+    }
+    // 重新开始
+    const reset = () => {
+        guaIndex = 6
+        guaIndexEl.innerHTML = guaIndex
+        descEl.innerHTML = ''
+        result = []
+        ifr1.src = `about:blank`
+        ctx.clearRect(0, 0, cvs.width, cvs.height)
+    }
+    // 卦图的渲染
+    const render = () => {
+        const bl = 2
+        cvs.style.width = width + 'px'
+        cvs.style.height = height + 'px'
+        cvs.width = width * 2
+        cvs.height = height * 2
+        ctx.clearRect(0, 0, cvs.width, cvs.height)
+        ctx.beginPath()
+        let x = 10 * bl
+        let w1 = 40 * bl
+        let space = 8 * bl
+        let w2 = w1 * 2 + space
+        let h = 20 * bl
+        ctx.lineWidth = h / 2
+        ctx.textBaseline = 'middle'
+        ctx.font = 16 * bl + 'px bold'
+        result.forEach((v, i) => {
+            const y = (result.length - i) * h
+            ctx.fillText(v, x + w2 + 10, y)
+            if (v === 6 || v === 8) {
+                ctx.moveTo(x, y)
+                ctx.lineTo(x + w1, y)
+                ctx.moveTo(x + w1 + space, y)
+                ctx.lineTo(x + w1 + space + w1, y)
+            } else if (v === 7 || v === 9) {
+                ctx.moveTo(x, y)
+                ctx.lineTo(x + w2, y)
+            }
+        })
+        ctx.stroke()
+    }
+</script>
 </html>

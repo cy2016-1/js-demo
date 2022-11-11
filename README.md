@@ -47,3 +47,4 @@
 * html+css/43.html [9宫格翻牌抽奖](https://gitee.com/qxscj/js-demo/blob/master/html+css/43.html)
 * html+css/44.html [emojo](https://gitee.com/qxscj/js-demo/blob/master/html+css/44.html)
 * html+css/45.html [图片base64转file](https://gitee.com/qxscj/js-demo/blob/master/html+css/45.html)
+* html+css/46.html [卜卦](https://gitee.com/qxscj/js-demo/blob/master/html+css/46.html)
