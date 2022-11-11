@@ -45,5 +45,5 @@
 * html+css/41.html [汉字找不同小游戏](https://gitee.com/qxscj/js-demo/blob/master/html+css/41.html)
 * html+css/42.html [postMessage sdk封装](https://gitee.com/qxscj/js-demo/blob/master/html+css/42.html)
 * html+css/43.html [9宫格翻牌抽奖](https://gitee.com/qxscj/js-demo/blob/master/html+css/43.html)
-* html+css/44.html [固定随机](https://gitee.com/qxscj/js-demo/blob/master/html+css/44.html)
+* html+css/44.html [emojo](https://gitee.com/qxscj/js-demo/blob/master/html+css/44.html)
 * html+css/45.html [图片base64转file](https://gitee.com/qxscj/js-demo/blob/master/html+css/45.html)
