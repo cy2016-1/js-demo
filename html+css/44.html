@@ -4,38 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>报名人数增长</title>
-    <style>
-        #count {
-            color: red
-        }
-    </style>
+    <title>获取所有emojo表情包</title>
 </head>
 <style>
+    body {
+        word-break: break-all;
+    }
 </style>
 <body>
-    <div>已有<label id="count"></label>人参与了此次活动 <button onclick="baoMing()">我要报名</button></div>
+    👦👧👨👩
 </body>
 <script>
-    /**
-     * 数字不定期往上增长
-     */
-    localStorage.setItem('count', '')
-    function renderCount() {
-        let count = 3000
-        const saveCount = Number(localStorage.getItem('count')) || 0
-        const d1 = 1668062980222
-        const d2 = Date.now()
-        const dd = Math.floor((d2 - d1) / 3000)
-        count += dd
-        count += saveCount
-        document.getElementById('count').innerHTML = count
+const arr = [
+    ['D83C', 'DF00', 'DFFF'],
+    ['D83D', 'DC00', 'DCFF'],
+    ['D83D', 'DD00', 'DDFF'],
+    ['D83D', 'DE00', 'DEFF'],
+    ['D83E', 'DF00', 'DFFF']
+]
+const result = []
+arr.forEach(v => {
+    const items = []
+    const v1 = parseInt(v[1], 16)
+    const v2 = parseInt(v[2], 16)
+    for(let i=v1;i<=v2;i++) {
+        items.push((`${`\\u${v[0].toLocaleLowerCase()}\\u${i.toString(16)}`}`))
     }
-    function baoMing() {
-        localStorage.setItem('count', 1)
-        renderCount()
-    }
-    setInterval(() => renderCount(), 1000)
-    renderCount()
+    result.push(items)
+})
+document.body.innerHTML = result.map(v => {
+    return `<div>${v.map(k => `<span value="${k}">${eval(`'${k}'`)}</span>`).join('')}</div>`
+}).join('')
+
 </script>
 </html>
