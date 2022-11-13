@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>table</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        .fixedTHead {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            border-bottom: 1px solid #ddd;
+        }
+        .fixedTHead .td {
+            font-weight: bold;
+        }
+        .fixedLeft {
+            position: sticky;
+            left: 0;
+        }
+        .table-group {
+            width: 100vw;
+            height: 100vh;
+            overflow: auto;
+
+        }
+        .table {
+            width: 800px;
+            display: flex;
+            flex-direction: column;
+        }
+        .tr {
+            display: flex;
+        }
+        .td,.th {
+            background-color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+        .flex1 {
+            flex: 1;
+        }
+        .flex2 {
+            flex: 1
+        }
+        .flex3{
+            flex: 2;
+        }
+        .flex4 {
+            flex: 5;
+        }
+        .flex5 {
+            flex: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-group">
+        <div class="table">
+            <div class="tr fixedTHead">
+                <div class="td flex1 fixedLeft">ID</div>
+                <div class="td flex2">名称</div>
+                <div class="td flex3">联系方式</div>
+                <div class="td flex4">地址</div>
+                <div class="td flex5">注册时间</div>
+            </div>
+            <div class="tbody" id="body1">
+
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document.getElementById('body1').innerHTML = new Array(60).fill({
+        id: 1,
+        name: '章三',
+        phone: '199****9999',
+        address: 'xx省xx市xx区xx街道xx小区xx栋xx号',
+        createTime: '2020-02-22'
+    }).map((v, i) => {
+        return `<div class="tr">
+            <div class="fixedLeft flex1 td">${i + 1}</div>
+            <div class="td flex2">${v.name}</div>
+            <div class="td flex3">${v.phone}</div>
+            <div class="td flex4">${v.address}</div>
+            <div class="td flex5">${v.createTime}</div>
+        </div>`
+    }).join('')
+</script>
+</html>
