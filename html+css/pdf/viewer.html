@@ -32,7 +32,7 @@ See https://github.com/adobe-type-tools/cmap-resources
     <link rel="stylesheet" href="./viewer.css">
     <link rel="resource" type="application/l10n" href="locale/locale.properties">
     <script>
-        const _pdfurl = location.search.match(/url=(.*?)(&|)$/)
+        var _pdfurl = location.search.match(/url=(.*?)(&|)$/)
         
         if (_pdfurl) {
             window.pdfUrl = decodeURIComponent(_pdfurl[1])
