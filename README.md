@@ -51,3 +51,4 @@
 * html+css/47.html [表白爱心](https://gitee.com/qxscj/js-demo/blob/master/html+css/47.html)
 * html+css/48.html [头列锁定](https://gitee.com/qxscj/js-demo/blob/master/html+css/48.html)
 * html+css/51.html [pdf预览](https://gitee.com/qxscj/js-demo/blob/master/html+css/51.html)
+* html+css/49.html [pdf预览](https://gitee.com/qxscj/js-demo/blob/master/html+css/49.html)

@@ -13,12 +13,28 @@
     var vConsole = new VConsole();
 </script>
 <script>
+    class Promise2 {
+        status = ''
+        static resolve() {
+            return this
+        }
+        static reject() {
+            return this
+        }
+    }
+    if (Promise.prototype.finally2 === undefined) {
+        Promise.prototype.finally2 = function (call) {
+            this.then(call)
+            this.catch(call)
+        }
+    }
     const render = () => {
         return new Promise((resolve,reject) => {
             resolve()
         })
     }
-    render().finally(() => {
+    render().finally2(() => {
+        console.log(111)
         document.body.innerHTML = `<h1>成功输出了</h1>`
     })
 </script>
