@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写签名2</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        #cvs {
+            display: block;
+            background-color: #dddddd;
+        }
+        .btn {
+            position: absolute;
+            top: 0;
+        }
+        .p2 {
+            left: 50px
+        }
+    </style>
+</head>
+<body>
+    <button class="btn" onclick="onRotate()">旋转</button>
+    <button class="btn p2" onclick="onDownload()">下载</button>
+    <canvas id="cvs" width="400" height="300"></canvas>
+    <script>
+        const cvs = document.getElementById('cvs')
+        const ctx = cvs.getContext('2d')
+        let isDrawing = false
+        const onRotate = () => {
+            const { width, height } = cvs
+            const img = new Image()
+            img.src = cvs.toDataURL('image/png')
+            img.onload = () => {
+                cvs.width = height
+                cvs.height = width
+                ctx.translate(cvs.width, 0)
+                ctx.rotate(Math.PI / 180 * 90)
+                ctx.drawImage(img, 0, 0)
+            }
+        }
+        const onDownload = async () => {
+            const a = document.createElement('a')
+            a.setAttribute('download', 'name.png')
+            const res = await fetch(cvs.toDataURL('image/png'))
+            const blob = await res.blob()
+            a.href = URL.createObjectURL(blob)
+            a.click()
+        }
+        const addEvents = (cvs, name, call) => {
+            const isMobile = navigator.userAgent.match(/Mobile/)
+            const mobileNameObj = {
+                'mousedown': 'touchstart',
+                'mousemove': 'touchmove',
+                'mouseup': 'touchend'
+            }
+            if (isMobile) {
+                cvs.addEventListener(mobileNameObj[name], e => {
+                    call(e.touches[0])
+                })
+            } else {
+                cvs.addEventListener(name, e => {
+                    call(e)
+                })
+            }
+        }
+        addEvents(cvs, 'mousedown', e => {
+            isDrawing = true
+            ctx.moveTo(e.pageX, e.pageY)
+        })
+        addEvents(cvs, 'mousemove', e => {
+            if (isDrawing) {
+                ctx.lineWidth = 10
+                ctx.lineTo(e.pageX, e.pageY)
+                ctx.stroke()
+            }
+        })
+        addEvents(cvs, 'mouseup', e => {
+            isDrawing = false
+        })
+    </script>
+</body>
+</html>
