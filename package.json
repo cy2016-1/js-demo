@@ -6,7 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://gitee.com/qxscj/js-demo.git"
@@ -15,6 +14,11 @@
   "license": "ISC",
   "dependencies": {
     "crypto-js": "^4.1.1",
+    "koa": "^2.13.4",
+    "koa-body": "^6.0.1",
+    "koa-cors": "^0.0.16",
+    "koa-router": "^12.0.0",
+    "koa-static": "^5.0.0",
     "random_chinese_fantasy_names": "^0.1.17"
   }
 }

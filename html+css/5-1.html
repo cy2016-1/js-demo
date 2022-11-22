@@ -73,7 +73,7 @@
         })
         addEvents(cvs, 'mousemove', e => {
             if (isDrawing) {
-                ctx.lineWidth = 10
+                ctx.lineWidth = 5
                 ctx.lineTo(e.pageX, e.pageY)
                 ctx.stroke()
             }

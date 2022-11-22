@@ -1,13 +1,10 @@
-import {
-	getName,
-	getSkill,
-	getMaterial,
-	getTalisman,
-	getCreature,
-	getAlchemy,
-	getClan,
-	getLocation,
-	getNation,
-	getZone
-} from 'random_chinese_fantasy_names'
-console.log(getName)
+const arr = ['google', 'good', 'be', 'bad', 'girl']
+const toTreeJson = (arr) => {
+	arr.forEach(v => {
+		for(let j=0;j<v.length;j++) {
+
+		}
+	})
+}
+const result = toTreeJson(arr)
+console.log(result)
