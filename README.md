@@ -53,3 +53,4 @@
 * html+css/51.html [pdf预览](https://gitee.com/qxscj/js-demo/blob/master/html+css/51.html)
 * html+css/49.html [canvas像素操作](https://gitee.com/qxscj/js-demo/blob/master/html+css/49.html)
 * html+css/5-1.html [canvas手写签名图片方向调整](https://gitee.com/qxscj/js-demo/blob/master/html+css/5-1.html)
+* html+css/52.html [文件的切割与合并](https://gitee.com/qxscj/js-demo/blob/master/html+css/52.html)
