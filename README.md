@@ -54,3 +54,4 @@
 * html+css/49.html [canvas像素操作](https://gitee.com/qxscj/js-demo/blob/master/html+css/49.html)
 * html+css/5-1.html [canvas手写签名图片方向调整](https://gitee.com/qxscj/js-demo/blob/master/html+css/5-1.html)
 * html+css/52.html [文件的切割与合并](https://gitee.com/qxscj/js-demo/blob/master/html+css/52.html)
+* shader/shader-demo.html [着色器入门知识1](https://gitee.com/qxscj/js-demo/blob/master/shader/shader-demo.html)
