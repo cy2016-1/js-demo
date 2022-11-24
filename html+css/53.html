@@ -10,7 +10,7 @@
 
 <body>
     <div style="margin-bottom: 10px">
-        上传图片：<input type="file" onchange="onInit(URL.createObjectURL(this.files[0]))">
+        上传图片：<input type="file" onchange="onChange(this.files[0])">
     </div>
     <canvas id="cvs"></canvas>
     <canvas id="clipCvs"></canvas>
@@ -23,13 +23,16 @@
     const ctx = cvs.getContext('2d')
     const clipCtx = clipCvs.getContext('2d')
     const img = new Image()
-    let size = 200
+    let size = 150
     let maxW = 400
     const p = {
         left: 0,
         top: 0,
         stepX: 0,
         stepY: 0
+    }
+    const onChange = (file) => {
+        onInit(URL.createObjectURL(file))
     }
     const onInit = (src) => {
         clipCvs.width = clipCvs.height = size
@@ -64,7 +67,7 @@
         }
         clipPic(ctx.getImageData(left, top, size, size))
         ctx.beginPath()
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)'
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
         ctx.fillRect(left, top, size, size)
         p.left = left
         p.top = top
