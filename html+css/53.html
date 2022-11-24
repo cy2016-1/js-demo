@@ -34,6 +34,7 @@
     const onChange = (file) => {
         onInit(URL.createObjectURL(file))
     }
+    // 加载图片，并初始化裁剪功能
     const onInit = (src) => {
         clipCvs.width = clipCvs.height = size
         img.src = src
@@ -50,6 +51,7 @@
             render(width / 2 - size / 2, height / 2 - size / 2)
         }
     }
+    // 渲染裁剪前canvas
     const render = (left = 0, top = 0) => {
         ctx.clearRect(0, 0, cvs.width, cvs.height)
         ctx.drawImage(img, 0, 0, cvs.width, cvs.height)
@@ -72,6 +74,7 @@
         p.left = left
         p.top = top
     }
+    // 裁剪图片，并显示在右侧
     const clipPic = (data) => {
         clipCtx.clearRect(0, 0, clipCvs.width, clipCvs.height)
         clipCtx.putImageData(data, 0, 0)
