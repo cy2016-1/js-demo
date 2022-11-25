@@ -57,3 +57,4 @@
 * shader/shader-demo.html [着色器入门介绍（一）](https://gitee.com/qxscj/js-demo/blob/master/shader/shader-demo.html)
 * shader/shader1.html [着色器入门介绍（二）](https://gitee.com/qxscj/js-demo/blob/master/shader/shader1.html)
 * html+css/53.html [canvas图片裁剪](https://gitee.com/qxscj/js-demo/blob/master/html+css/53.html)
+* html+css/55.html [无规则剪贴](https://gitee.com/qxscj/js-demo/blob/master/html+css/55.html)
