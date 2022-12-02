@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>复制</title>
+    <style>
+        * {
+            font-size: 30px;
+        }
+        .editor {
+            border: 1px solid;
+            width:90%;
+            min-height:300px;
+            margin-top:10px
+        }
+        .editor img {
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="btn" onclick="copy1()">复制文本</button>
+    <button class="btn" onclick="copy2()">复制html</button>
+    <button class="btn" onclick="copy3()">复制图片</button>
+    <div class="editor" contenteditable="true"></div>
+    <script>
+        function copy1() {
+            navigator.clipboard.writeText('普通')
+        }
+        function copy2() {
+            const data = new Blob(['<b style="color:red">html文字</b>'], {type: 'text/html'})
+            const item = new ClipboardItem({'text/html': data});
+            navigator.clipboard.write([item]);
+        }
+        async function copy3() {
+            const res = await fetch('./images/girl.png')
+            const blob = await res.blob()
+            
+            const item = new ClipboardItem({'image/png': blob});
+            navigator.clipboard.write([item]);
+        }
+    </script>
+</body>
+
+</html>
