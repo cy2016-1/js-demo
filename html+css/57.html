@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>读取剪贴板</title>
+    <style>
+        * {
+            /* font-size: 30px; */
+        }
+        .editor {
+            border: 1px solid;
+            width:90%;
+            min-height:300px;
+            margin-top:10px
+        }
+        .editor img {
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="btn" onclick="read1()">读取剪贴板文本</button>
+    <button class="btn" onclick="read2()">读取剪贴板文件</button>
+    <div class="editor"></div>
+    <script>
+        const editor = document.querySelector('.editor')
+        async function read1() {
+            const text = await navigator.clipboard.readText()
+            editor.innerHTML = text
+        }
+        async function read2() {
+            const data = await navigator.clipboard.read()
+            const item = data[0]
+            editor.innerHTML = ''
+
+            item.types.forEach(async k => {
+                const blob = await item.getType(k)
+                if (k === 'text/html') {
+                    editor.innerHTML = await blob.text()
+                } else if (k.indexOf('image') === 0) {
+                    const img = document.createElement('img')
+                    img.src = URL.createObjectURL(blob)
+                    editor.appendChild(img)
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>
