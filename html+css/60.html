@@ -4,34 +4,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ResizeObserver</title>
-    <style>
-        .content {
-            border:1px solid;
-            width: 300px;
-            text-overflow: -o-ellipsis-lastline;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;					
-            -webkit-box-orient: vertical;
-        }
-    </style>
+    <title>图片跨域</title>
+    <script src="./60.js"></script>
 </head>
 <body>
-    <div class="content">
-        你好啊哈哈哈你好啊哈哈<span style="line-height: 3">uuu</span>哈你好啊哈哈哈你好啊哈哈哈你好啊哈哈哈你好啊哈哈哈你好啊哈哈哈你好啊哈哈哈
-    </div>
+    <img src="https://i2.hdslb.com/bfs/face/22cc981a22d2b579627590b1c95d6befa55c9408.jpg" alt="">
+    <!-- <iframe src="about:blank" onload="this.contentWindow.document.body.innerHTML=`<img src=https://i2.hdslb.com/bfs/face/22cc981a22d2b579627590b1c95d6befa55c9408.jpg />`" frameborder="0"></iframe> -->
+    <img-cors width="100" src="https://i2.hdslb.com/bfs/face/22cc981a22d2b579627590b1c95d6befa55c9408.jpg"></img-cors>
 </body>
-<!-- npm i intersection-observer -->
-<script src="https://polyfill.io/v3/polyfill.min.js?features=ResizeObserver"></script>
+
 <script>
-    var content = document.querySelector('.content')
-    var observer = new ResizeObserver(function (entries) {
-        const p = entries[0]
-        console.log(p)
-    })
-    observer.observe(content)
+    
 </script>
+
 </html>

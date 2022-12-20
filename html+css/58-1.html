@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gif制作</title>
+    <style>
+        body {
+            display: flex;
+        }
+        .item {
+            flex: 1;
+        }
+        h6 {
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="item">
+        <h2>video</h2>
+        <video id="video" controls src="./video/1.webm" width="250" height="140"></video>
+        <div>
+            开始录制gif:
+            <button onclick="onStart(this)">开始</button>
+            <button disabled onclick="onStop(this)">结束</button>
+            <label id="sec"></label>
+        </div>
+    </div>
+    <div class="item">
+        <h2>gif [点击图片下载]</h2>
+        <a><img src="" id="gifEl" /></a>
+        <canvas id="cvs" style="display: none;"></canvas>
+        <canvas id="cvs2" width="140" height="140" style="display: none;"></canvas>
+    </div>
+    
+</body>
+<script src="./js/gif.js"></script>
+<script src="./js/gif.worker.js"></script>
+<script>
+    /**
+     * 请注意：video的src视频资源太大，没有上传，请自己找video做测试
+     */
+    const cvs = document.getElementById('cvs')
+    const ctx = cvs.getContext('2d')
+    const cvs2 = document.getElementById('cvs2')
+    const ctx2 = cvs2.getContext('2d')
+    const video = document.getElementById('video')
+    const gifEl = document.getElementById('gifEl')
+    const sec = document.getElementById('sec')
+    cvs.width = video.width
+    cvs.height = video.height
+    const gif = new GIF({
+        workers: 20,
+        quality: 1
+    });
+    let isRender = false
+    const render = () => {
+        if (ctx) {
+            ctx.clearRect(0, 0, cvs.width, cvs.height)
+            ctx.drawImage(video, 0, 0, cvs.width, cvs.height)
+        }
+        if (isRender) {
+            sec.innerHTML = parseInt(sec.innerHTML) + 1 + '帧'
+            const img = document.createElement('img')
+            img.src = cvs.toDataURL('image/png')
+            img.onload = () => {
+                ctx2.drawImage(img, -55, 0)
+                
+                const img2 = document.createElement('img')
+                img2.src = cvs2.toDataURL('image/png')
+                img2.onload = () => {
+                    gif.addFrame(img2, {
+                        delay: 100 // 帧动画速度
+                    })
+                }
+                
+            }
+            
+        }
+        setTimeout(render, 100)
+        
+    }
+    render()
+    const onStart = (me) => {
+        sec.innerHTML = '0帧'
+        video.play()
+        isRender = true
+        me.setAttribute('disabled', 'disabled')
+        me.nextElementSibling.removeAttribute('disabled')
+
+    }
+    const onStop = (me) => {
+        me.setAttribute('disabled', 'disabled')
+        me.previousElementSibling.removeAttribute('disabled')
+        isRender = false
+        gif.on('finished', function (blob) {
+            gifEl.src = URL.createObjectURL(blob)
+            gifEl.parentElement.setAttribute('download', 'my.gif')
+            gifEl.parentElement.href = gifEl.src
+        });
+        gif.render();
+        
+    }
+
+   
+    
+    
+</script>
+
+</html>

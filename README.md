@@ -62,4 +62,5 @@
 * html+css/57.html [粘贴功能](https://gitee.com/qxscj/js-demo/blob/master/html+css/57.html)
 * html+css/58.html [js制作gif](https://gitee.com/qxscj/js-demo/blob/master/html+css/58.html)
 * html+css/59.html [IntersectionObserver](https://gitee.com/qxscj/js-demo/blob/master/html+css/59.html)
-* html+css/59.html [暗色主题](https://gitee.com/qxscj/js-demo/blob/master/html+css/61.html)
+* html+css/61.html [暗色主题](https://gitee.com/qxscj/js-demo/blob/master/html+css/61.html)
+* html+css/60.html [显示跨域图片](https://gitee.com/qxscj/js-demo/blob/master/html+css/60.html)

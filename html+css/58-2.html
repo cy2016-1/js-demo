@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gif制作</title>
+    <style>
+        body {
+            display: flex;
+        }
+        .item {
+            flex: 1;
+        }
+        h6 {
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="item">
+        <h2>gif [点击图片下载]</h2>
+        <a><img src="" id="gifEl" /></a>
+        <canvas id="cvs" width="140" height="140"></canvas>
+    </div>
+    
+</body>
+<script src="./js/gif.js"></script>
+<script src="./js/gif.worker.js"></script>
+<script>
+    /**
+     * 请注意：video的src视频资源太大，没有上传，请自己找video做测试
+     */
+    const cvs = document.getElementById('cvs')
+    const ctx = cvs.getContext('2d')
+    const gifEl = document.getElementById('gifEl')
+    const gif = new GIF({
+        workers: 20,
+        quality: 1
+    });
+    const loadImages = async (arr) => {
+        for(let i=0;i<arr.length;i++) {
+            const img = await loadImage(arr[i])
+            arr[i] = img
+        }
+    }
+    const loadImage = (src) => {
+        return new Promise(res => {
+            const img = new Image()
+            img.src = src
+            img.onload = () => {
+                res(img)
+            }
+        })
+    }
+    const gifArr = new Array(6).fill('./images/su1.png')
+    const render = (arr, i) => {
+        ctx.clearRect(0, 0, cvs.width, cvs.height)
+        ctx.scale(0.9, 0.9)
+        ctx.drawImage(arr[i], 0, 0, cvs.width, cvs.height)
+        const img = document.createElement('img')
+        img.src = cvs.toDataURL('image/png')
+        
+        img.onload = () => {
+            gif.addFrame(img, {
+                background: '#ffffff',
+                delay: 100 // 帧动画速度
+            })
+            i++
+            if (arr[i]) {
+                render(arr, i)
+            } else {
+                gif.on('finished', function (blob) {
+                    gifEl.src = URL.createObjectURL(blob)
+                    gifEl.parentElement.setAttribute('download', 'my.gif')
+                    gifEl.parentElement.href = gifEl.src
+                });
+                gif.render();
+            }
+        }
+        
+    }
+    ;(async () => {
+        await loadImages(gifArr)
+        render(gifArr, 0)
+    })()
+    
+    
+</script>
+
+</html>
