@@ -40,6 +40,7 @@
 * html+css/37.html [摄像头拍照](https://gitee.com/qxscj/js-demo/blob/master/html+css/37.html)
 * html+css/37-1.html [摄像头拍登记照（可切换底色）](https://gitee.com/qxscj/js-demo/blob/master/html+css/37-1.html)
 * html+css/38.html [摄像头录制](https://gitee.com/qxscj/js-demo/blob/master/html+css/38.html)
+* html+css/38-1.html [音频录制](https://gitee.com/qxscj/js-demo/blob/master/html+css/38-1.html)
 * html+css/39.html [手电筒效果](https://gitee.com/qxscj/js-demo/blob/master/html+css/39.html)
 * html+css/40.html [canvas撤销与恢复](https://gitee.com/qxscj/js-demo/blob/master/html+css/40.html)
 * html+css/41.html [汉字找不同小游戏](https://gitee.com/qxscj/js-demo/blob/master/html+css/41.html)
