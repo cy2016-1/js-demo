@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #btn {
+            margin: 10px;
+            font-size: 32px;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="btn">屏幕录制</button>
+    <video id="video" width="900"></video>
+</body>
+<script>
+    const btn = document.getElementById('btn');
+    const video = document.getElementById('video');
+
+    btn.addEventListener("click", async function () {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+        video.srcObject = stream
+        video.onloadedmetadata = () => video.play()
+        const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm";
+        const mediaRecorder = new MediaRecorder(stream, { mimeType: mime });
+        //录制
+        const chunks = [];
+        mediaRecorder.addEventListener('dataavailable', function (e) {
+            chunks.push(e.data)
+        })
+        //停止
+        mediaRecorder.addEventListener('stop', function () {
+            const blob = new Blob(chunks, { type: chunks[0].type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'video.webm';
+            a.click();
+        })
+        //手动启动
+        mediaRecorder.start()
+    });
+</script>
+</html>
