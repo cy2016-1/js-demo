@@ -66,3 +66,4 @@
 * html+css/61.html [暗色主题](https://gitee.com/qxscj/js-demo/blob/master/html+css/61.html)
 * html+css/60.html [显示跨域图片](https://gitee.com/qxscj/js-demo/blob/master/html+css/60.html)
 * html+css/62.html [js屏幕录制](https://gitee.com/qxscj/js-demo/blob/master/html+css/62.html)
+* html+css/63.html [js声音控制](https://gitee.com/qxscj/js-demo/blob/master/html+css/63.html)

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>声音控制</title>
+</head>
+
+<body>
+    <button onclick="create()">start</button>
+</body>
+<script>
+    const audio_data_list = [261.63,293.66,329.63,349.23,392.00,440.00,493.88, 261.63 * 2].map(v => v * 2)
+    const audio_type_list = ['sine', 'square', 'sawtooth', 'triangle']
+    let typeIndex = 2
+    let index = 0
+    function create() {
+        
+        // 创建音频上下文  
+        const audioCtx = new AudioContext();
+        // 创建音调控制对象  
+        const oscillator = audioCtx.createOscillator();
+        // 创建音量控制对象  
+        const gainNode = audioCtx.createGain();
+        // 音调音量关联  
+        oscillator.connect(gainNode);
+        // 音量和设备关联  
+        gainNode.connect(audioCtx.destination);
+        // 音调类型指定为正弦波  
+        oscillator.type = audio_type_list[typeIndex];
+        // 设置音调频率  
+        oscillator.frequency.value = audio_data_list[index];
+        // 先把当前音量设为0  
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        // 0.01秒时间内音量从刚刚的0变成1，线性变化 
+        gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.01);
+        // 声音走起 
+        oscillator.start(audioCtx.currentTime);
+        // 1秒时间内音量从刚刚的1变成0.001，指数变化 
+        gainNode.gain.exponentialRampToValueAtTime(0.1, audioCtx.currentTime + 1);
+        // 1秒后停止声音 
+        oscillator.stop(audioCtx.currentTime + 1);
+        if (index >= audio_data_list.length - 1) {
+            index=0
+        } else {
+            index++
+        }
+    }
+
+</script>
+
+</html>

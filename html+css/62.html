@@ -32,7 +32,9 @@
         video.srcObject = stream
         video.onloadedmetadata = () => video.play()
         const mime = MediaRecorder.isTypeSupported("video/webm; codecs=vp9") ? "video/webm; codecs=vp9" : "video/webm";
-        const mediaRecorder = new MediaRecorder(stream, { mimeType: mime });
+        const mediaRecorder = new MediaRecorder(stream, {
+            mimeType: mime 
+        });
         //录制
         const chunks = [];
         mediaRecorder.addEventListener('dataavailable', function (e) {
