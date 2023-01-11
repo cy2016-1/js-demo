@@ -9,15 +9,25 @@
 </head>
 
 <body>
-    <button onclick="create()">start</button>
+    <div id="types">
+
+    </div>
+    <button onclick="create(this)">开始播放</button>
 </body>
 <script>
-    const audio_data_list = [261.63,293.66,329.63,349.23,392.00,440.00,493.88, 261.63 * 2].map(v => v * 2)
+    const audio_data_list = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 261.63 * 2].map(v => v)
     const audio_type_list = ['sine', 'square', 'sawtooth', 'triangle']
-    let typeIndex = 2
+    let typeIndex = 0
     let index = 0
-    function create() {
-        
+    document.getElementById('types').innerHTML = `音调类型: ` + audio_type_list.map((v, i) => {
+        return `<button onclick="setType(${i})">${v}</button> `
+    }).join('') + `<span id="selType">${audio_type_list[typeIndex]}</span>`
+    function setType(i) {
+        typeIndex = i.toString()
+        document.getElementById('selType').innerHTML = audio_type_list[i]
+    }
+    function create(me) {
+        me.innerHTML = `基础音：${index === 7 ? '+1' : (index + 1)}`
         // 创建音频上下文  
         const audioCtx = new AudioContext();
         // 创建音调控制对象  
@@ -43,7 +53,7 @@
         // 1秒后停止声音 
         oscillator.stop(audioCtx.currentTime + 1);
         if (index >= audio_data_list.length - 1) {
-            index=0
+            index = 0
         } else {
             index++
         }
