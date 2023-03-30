@@ -17,7 +17,7 @@
 <script>
     const audio_data_list = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 261.63 * 2].map(v => v)
     const audio_type_list = ['sine', 'square', 'sawtooth', 'triangle']
-    let typeIndex = 0
+    let typeIndex = 1
     let index = 0
     document.getElementById('types').innerHTML = `音调类型: ` + audio_type_list.map((v, i) => {
         return `<button onclick="setType(${i})">${v}</button> `
@@ -27,6 +27,7 @@
         document.getElementById('selType').innerHTML = audio_type_list[i]
     }
     function create(me) {
+        let volBl = 0.1
         me.innerHTML = `基础音：${index === 7 ? '+1' : (index + 1)}`
         // 创建音频上下文  
         const audioCtx = new AudioContext();
@@ -42,14 +43,15 @@
         oscillator.type = audio_type_list[typeIndex];
         // 设置音调频率  
         oscillator.frequency.value = audio_data_list[index];
+        // oscillator.frequency.value = 2000;
         // 先把当前音量设为0  
         gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
         // 0.01秒时间内音量从刚刚的0变成1，线性变化 
-        gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.01);
+        gainNode.gain.linearRampToValueAtTime(1 * volBl, audioCtx.currentTime + 0.01);
         // 声音走起 
         oscillator.start(audioCtx.currentTime);
         // 1秒时间内音量从刚刚的1变成0.001，指数变化 
-        gainNode.gain.exponentialRampToValueAtTime(0.1, audioCtx.currentTime + 1);
+        gainNode.gain.exponentialRampToValueAtTime(0.1 * volBl, audioCtx.currentTime + 1);
         // 1秒后停止声音 
         oscillator.stop(audioCtx.currentTime + 1);
         if (index >= audio_data_list.length - 1) {

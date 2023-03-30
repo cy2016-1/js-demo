@@ -17,4 +17,4 @@ const result = C.AES.decrypt({
     padding: C.pad.Pkcs7
 }).toString(C.enc.Utf8)
 console.log('加密', ciphertext)
-console.log('解密', result)
+console.log('解密', result, str)

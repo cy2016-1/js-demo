@@ -67,3 +67,4 @@
 * html+css/60.html [显示跨域图片](https://gitee.com/qxscj/js-demo/blob/master/html+css/60.html)
 * html+css/62.html [js屏幕录制](https://gitee.com/qxscj/js-demo/blob/master/html+css/62.html)
 * html+css/63.html [js声音控制](https://gitee.com/qxscj/js-demo/blob/master/html+css/63.html)
+* html+css/65.html [重写setTimeout 和 setInterval](https://gitee.com/qxscj/js-demo/blob/master/html+css/65.html)
