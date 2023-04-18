@@ -15,7 +15,7 @@
 //     if (i > 0)gi[i] += gi[i-1]
 // }
 // gi = gi.map((v, i) => ({max: v, min: (i === 0 ? 0 : gi[i-1])}))
-// const ll = 10
+// const ll = 20
 // let all = 0
 // for(let j=0;j<1;j++) {
 //     var result = {}
@@ -32,22 +32,22 @@
 //     console.log(ll+'连开第'+(j+1)+'次：')
 //     console.log(result)
 // }
-// console.log(`成本：${10 * 15}，收益：${all}`)
+// console.log(`成本：${ll * 15}，收益：${all}`)
 
 const gname = ['古堡', '巴士', '花车', '飞船']
 const glNum = [1.7, 4.6, 20.8, 2.4]
 const cb = [500, 100, 200, 200]
 const jz = [28800, 2000, 1000, 8000]
 const mb = [150, 15, 40, 95]
-const index = 0
+const index = 2
 let gl = glNum[index] / 100
 let sum = 0
-let cs = 100
+let cs = 30
 for(let j=0;j<1;j++) {
     let count = 0
     
     for(let i=0;i<cs;i++) {
-        if (Math.random() < gl || sum % mb[index] === 0) {
+        if (Math.random() < gl || (sum % mb[index] === 0 && sum > 0)) {
             count++
             sum++
         }

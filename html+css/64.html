@@ -10,12 +10,14 @@
         Events.on('my-message', (data) => {
             console.log(data)
         })
-        Events.emit('my-message', {
-            a: 1
-        })
+        document.querySelector('#btn').onclick = () => {
+            Events.emit('my-message', { a: 1})
+        }
     </script>
 </head>
 <body>
-    
+    <div id="app">
+        <button id="btn">传递</button>
+    </div>
 </body>
 </html>

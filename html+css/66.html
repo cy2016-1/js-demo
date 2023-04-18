@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>底部窗口自动跟随</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        header {
+            height: 100px;
+            background-color:blanchedalmond;
+        }
+        article {
+            background-color: cadetblue;
+            height: 100px;
+            transition: height 0.5s;
+        }
+        footer {
+            position: sticky;
+            bottom: 0px;
+            height: 100px;
+            background-color:chocolate;
+            color: #fff;
+            text-align: center;
+            line-height: 100px;
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+    <header></header>
+    <article onclick="this.style.height = (this.offsetHeight === 1000 ? 100 : 1000) + 'px'">
+    </article>
+    <footer>当内容不足一屏时，footer自动顶上去，当超出一屏时，footer自动锁定</footer>
+</body>
+</html>
